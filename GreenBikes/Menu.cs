@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GreenBikes.Controller;
+using System;
 using static System.Console;
 
 namespace GreenBikes
@@ -11,8 +12,15 @@ namespace GreenBikes
             string[] options = { "Bike Categories" };
             DisplayOptions(title, options);
 
-            switch (GetChoice())
+            BikeCategoryController bikeCategoryController = new BikeCategoryController();
+            switch (GetPressedKey())
             {
+                case 0: // Tests
+                    do
+                    {
+                        bikeCategoryController.CreateBikeCategory();
+                    } while (GetChoice("Wiederholen?"));
+                    break;
                 case 1:
                     BikeCategoryMenu();
                     break;
@@ -26,10 +34,11 @@ namespace GreenBikes
             string[] options = { "Create" };
             DisplayOptions(title, options);
 
-            switch (GetChoice())
+            BikeCategoryController controller = new BikeCategoryController();
+            switch (GetPressedKey())
             {
                 case 1:
-
+                    controller.CreateBikeCategory();
                     break;
 
             }
@@ -46,7 +55,7 @@ namespace GreenBikes
                 WriteLine(spacer + options[i]);
             }
         }
-        private uint GetChoice()
+        private uint GetPressedKey()
         {
             ConsoleKey pressedKey = ReadKey().Key;
 
@@ -69,6 +78,22 @@ namespace GreenBikes
                     return 5;
             }
             return 0;
+        }
+        private bool GetChoice(string prompt)
+        {
+            ConsoleKey pressedKey;
+
+            do
+            {
+                Write(prompt + "(j/n)");
+                pressedKey = ReadKey().Key;
+            } while (pressedKey != ConsoleKey.J || pressedKey != ConsoleKey.N);
+
+            if (pressedKey == ConsoleKey.J)
+            {
+                return true;
+            }
+            return false;
         }
     }
 
