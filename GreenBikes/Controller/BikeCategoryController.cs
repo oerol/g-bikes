@@ -10,6 +10,7 @@ namespace GreenBikes.Controller
         private List<BikeCategory> bikeCategories = new List<BikeCategory>();
         public void CreateBikeCategory()
         {
+            Clear();
             Write("Name: ");
             string name = ReadLine();
 
@@ -18,19 +19,32 @@ namespace GreenBikes.Controller
 
             Write("Wöchentliche Gebühr: ");
             float weeklyFee = Utilities.ReadFloat();
-            
+
             Write("Maximale Geschwindigkeit: ");
             byte maximumSpeed = Utilities.ReadByte();
 
-            BikeCategory newBike = new BikeCategory(name,dailyFee, weeklyFee, maximumSpeed);
+            BikeCategory newBike = new BikeCategory(name, dailyFee, weeklyFee, maximumSpeed);
             bikeCategories.Add(newBike);
             ListItems(bikeCategories);
         }
         public void ListItems<T>(List<T> list)
         {
-            foreach (T item in list)
+            Write("\n");
+            for (int i = 0; i < list.Count; i++)
             {
-                WriteLine(item.ToString());
+                if (i % 2 == 0)
+                {
+                    ForegroundColor = ConsoleColor.Black;
+                    BackgroundColor = ConsoleColor.White;
+                }
+                else
+                {
+
+                    ForegroundColor = ConsoleColor.White;
+                    BackgroundColor = ConsoleColor.Black;
+                }
+                WriteLine(i + 1 + ". " + list[i].ToString());
+                ResetColor();
             }
         }
     }
