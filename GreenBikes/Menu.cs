@@ -22,7 +22,10 @@ namespace GreenBikes
                     } while (GetChoice("Wiederholen?"));
                     break;
                 case 1:
-                    BikeCategoryMenu();
+                    do
+                    {
+                        bikeCategoryController.CreateBikeCategory();
+                    } while (GetChoice("Wiederholen?"));
                     break;
 
             }
@@ -85,9 +88,10 @@ namespace GreenBikes
 
             do
             {
-                Write(prompt + "(j/n)");
+                Write(" \n" + prompt + "(j/n)");
                 pressedKey = ReadKey().Key;
-            } while (pressedKey != ConsoleKey.J || pressedKey != ConsoleKey.N);
+
+            } while (pressedKey != ConsoleKey.J && pressedKey != ConsoleKey.N);
 
             if (pressedKey == ConsoleKey.J)
             {
