@@ -1,13 +1,34 @@
-﻿using System;
+﻿using GreenBikes.Models;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml.Serialization;
 using static System.Console;
 
 namespace GreenBikes.Controller
 {
-    internal class Utilities
+    public class Utilities
     {
         private static string errorMessage = "Bitte versuche es erneut: ";
+
+        public static string ReadString()
+        {
+            string result = "";
+            while (result == "")
+            {
+                result = ReadLine();
+                if (result != "")
+                {
+                    return result;
+                }
+                else
+                {
+                    Write(errorMessage);
+                }
+            }
+            return result;
+        }
         public static float ReadFloat()
         {
             float number = 0;
@@ -23,7 +44,7 @@ namespace GreenBikes.Controller
                     Write(errorMessage);
                 }
             }
-                return number;
+            return number;
         }
         public static byte ReadByte()
         {
@@ -39,7 +60,7 @@ namespace GreenBikes.Controller
                 {
                     if (e is OverflowException)
                     {
-                    Write("Dein Wert scheint zu hoch zu sein, versuche es erneut:  ");
+                        Write("Dein Wert scheint zu hoch zu sein, versuche es erneut:  ");
                     }
                     else if (e is FormatException)
                     {
@@ -48,6 +69,36 @@ namespace GreenBikes.Controller
                 }
             }
             return number;
+        }
+        public static void Save()
+        {
+            BikeCategory u = new BikeCategory();
+            u.Name = "logan";
+            u.MaximumSpeed = 222;
+            XmlSerializer serializer = GetSerializer<BikeCategory>();
+            using (StreamWriter writer = new StreamWriter(u.GetType().Name + ".xml"))
+            {
+                serializer.Serialize(writer, u);
+            }
+
+        }
+        public static XmlSerializer GetSerializer<T>()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            return serializer;
+        }
+
+        public static void LoadList()
+        {
+            BikeCategory u = new BikeCategory();
+            XmlSerializer serializer = GetSerializer<BikeCategory>();
+            using (FileStream myFileStream = new FileStream(u.GetType().Name + ".xml", FileMode.Open))
+            {
+                // Deserialize-Methode aufrufen und Return-Wert casten
+                u = (BikeCategory)serializer.Deserialize(myFileStream);
+            }
+            WriteLine("LOADEDXML: " + u.ToString());
+
         }
     }
 }

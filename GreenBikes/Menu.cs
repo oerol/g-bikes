@@ -12,6 +12,8 @@ namespace GreenBikes
             string[] options = { "Bike Categories" };
             DisplayOptions(title, options);
 
+            //Utilities.Save();
+            Utilities.LoadList();
             BikeCategoryController bikeCategoryController = new BikeCategoryController();
             switch (GetPressedKey())
             {
@@ -22,11 +24,9 @@ namespace GreenBikes
                     } while (GetChoice("Wiederholen?"));
                     break;
                 case 1:
-                    do
-                    {
-                        bikeCategoryController.CreateBikeCategory();
-                    } while (GetChoice("Wiederholen?"));
+                    BikeCategoryMenu();
                     break;
+
 
             }
         }
@@ -34,17 +34,24 @@ namespace GreenBikes
         public void BikeCategoryMenu()
         {
             string title = "Bike Category";
-            string[] options = { "Create" };
+            string[] options = { "Create", "List" };
             DisplayOptions(title, options);
 
             BikeCategoryController controller = new BikeCategoryController();
             switch (GetPressedKey())
             {
                 case 1:
-                    controller.CreateBikeCategory();
+                    do
+                    {
+                        controller.CreateBikeCategory();
+                    } while (GetChoice("Wiederholen?"));
+                    BikeCategoryMenu();
                     break;
-
+                case 2:
+                    controller.ListItems(controller.bikeCategories);
+                    break;
             }
+
         }
 
         private void DisplayOptions(string title, string[] options)

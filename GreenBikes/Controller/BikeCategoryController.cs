@@ -7,12 +7,12 @@ namespace GreenBikes.Controller
 {
     internal class BikeCategoryController
     {
-        private List<BikeCategory> bikeCategories = new List<BikeCategory>();
+        public List<BikeCategory> bikeCategories = new List<BikeCategory>();
         public void CreateBikeCategory()
         {
             Clear();
             Write("Name: ");
-            string name = ReadLine();
+            string name = Utilities.ReadString();
 
             Write("Tägliche Gebühr: ");
             float dailyFee = Utilities.ReadFloat();
@@ -23,7 +23,12 @@ namespace GreenBikes.Controller
             Write("Maximale Geschwindigkeit: ");
             byte maximumSpeed = Utilities.ReadByte();
 
-            BikeCategory newBike = new BikeCategory(name, dailyFee, weeklyFee, maximumSpeed);
+            BikeCategory newBike = new BikeCategory();
+            newBike.Name = name;
+            newBike.DailyFee = dailyFee;
+            newBike.WeeklyFee = weeklyFee;
+            newBike.MaximumSpeed = maximumSpeed;
+
             bikeCategories.Add(newBike);
             ListItems(bikeCategories);
         }
