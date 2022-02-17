@@ -29,6 +29,7 @@ namespace GreenBikes
             switch (GetChoice())
             {
                 case 1:
+
                     break;
 
             }
@@ -63,6 +64,9 @@ namespace GreenBikes
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
                     return 4;
+                case ConsoleKey.D5:
+                case ConsoleKey.NumPad5:
+                    return 5;
             }
             return 0;
         }
