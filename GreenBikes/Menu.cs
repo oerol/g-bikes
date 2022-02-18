@@ -13,7 +13,7 @@ namespace GreenBikes
             DisplayOptions(title, options);
 
             //Utilities.Save();
-            Utilities.LoadList();
+            //Utilities.LoadList();
             BikeCategoryController bikeCategoryController = new BikeCategoryController();
             switch (GetPressedKey())
             {

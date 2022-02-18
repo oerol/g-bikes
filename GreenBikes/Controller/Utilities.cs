@@ -70,21 +70,20 @@ namespace GreenBikes.Controller
             }
             return number;
         }
-        public static void Save()
+        public static void Save<T>(List<T> list)
         {
-            BikeCategory u = new BikeCategory();
-            u.Name = "logan";
-            u.MaximumSpeed = 222;
-            XmlSerializer serializer = GetSerializer<BikeCategory>();
-            using (StreamWriter writer = new StreamWriter(u.GetType().Name + ".xml"))
+
+            XmlSerializer serializer = GetSerializer<T>();
+            WriteLine(serializer.ToString());
+            using (StreamWriter writer = new StreamWriter(list[0].GetType().Name + ".xml"))
             {
-                serializer.Serialize(writer, u);
+                serializer.Serialize(writer, list);
             }
 
         }
         public static XmlSerializer GetSerializer<T>()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
             return serializer;
         }
 

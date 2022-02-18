@@ -30,7 +30,9 @@ namespace GreenBikes.Controller
             newBike.MaximumSpeed = maximumSpeed;
 
             bikeCategories.Add(newBike);
+            bikeCategories.Add(newBike);
             ListItems(bikeCategories);
+            Utilities.Save(bikeCategories);
         }
         public void ListItems<T>(List<T> list)
         {
