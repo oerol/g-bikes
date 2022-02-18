@@ -56,7 +56,7 @@ namespace GreenBikes
                     do
                     {
                         controller.CreateBikeCategory();
-                    } while (GetChoice("Wiederholen?"));
+                    } while (GetChoice("Fahrrad wurde erfolgreich erstellt! Ein weiteres erstellen?"));
                     BikeCategoryMenu();
                     break;
                 case 2:
@@ -108,7 +108,7 @@ namespace GreenBikes
         }
         public void BikeMenu()
         {
-            string title = MenuTitles.bikeCategory + "\nHier dreht sich alles um Fahrräder.\nWähle eine Aktion.";
+            string title = MenuTitles.bike + "\nHier dreht sich alles um Fahrräder.\nWähle eine Aktion.";
             string[] options = { "Eine neues Fahrrad erstellen", "Liste aller Fahrräder", "Zurück" };
             DisplayOptions(title, options);
 
@@ -122,7 +122,7 @@ namespace GreenBikes
                     {
                         controller.CreateBike();
                     } while (GetChoice("Wiederholen?"));
-                    BikeCategoryMenu();
+                    BikeMenu();
                     break;
                 case 2:
                     BikeListMenu();
@@ -150,16 +150,13 @@ namespace GreenBikes
             switch (GetPressedKey())
             {
                 case 1:
-                    Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
                     controller.Edit();
                     break;
                 case 2:
                     do
                     {
-
-
                         Utilities.RemoveEntry(controller.bikes);
-                    } while (controller.bikes.Count != 0 && GetChoice("Wiederholen?"));
+                    } while (controller.bikes.Count != 0 && GetChoice("Eintrag gelöscht! Wiederholen?"));
                     BikeListMenu();
                     break;
                 case 3:

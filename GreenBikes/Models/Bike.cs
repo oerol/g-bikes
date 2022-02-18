@@ -9,10 +9,11 @@ namespace GreenBikes.Models
         public string Manufacturer { get; set; }
         public string Model { get; set; }
         public uint Power { get; set; }
+        public BikeCategory Category { get; set; }
 
         override public string ToString()
         {
-            return $"Hersteller: {Manufacturer}, Modell: {Model}, Leistung (W): {Power}";
+            return $"Hersteller: {Manufacturer}, Modell: {Model}, Leistung (W): {Power}, Kategorie: {Category.Name}";
         }
     }
 

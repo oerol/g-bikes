@@ -28,6 +28,15 @@ namespace GreenBikes.Controller
             newBike.Model = model;
             newBike.Power = power;
 
+            List<BikeCategory> categories = Utilities.LoadList(new BikeCategory()); // Leeres Objekt für den XMLSerializer ä: in die methode
+            Utilities.ListItems(categories);
+
+            Write("\nZu welcher Kategorie gehört dieses Fahrrad?: ");
+            int index = Utilities.ReadNumberWithMaxValue(ReadLine(), categories.Count);
+            newBike.Category = categories[index];
+
+
+
             bikes.Add(newBike);
             Utilities.Save(bikes);
         }
@@ -44,12 +53,21 @@ namespace GreenBikes.Controller
         }
         public void Edit(int index = -1)
         {
+
+            if (bikes.Count == 0)
+            {
+                WriteLine("Keine Einträge zum Bearbeiten verfügbar!");
+                System.Threading.Thread.Sleep(700); // Danach wird der Warnhinweis ausgeblendet
+                new Menu().BikeListMenu();
+                return;
+            }
+            Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
+
             if (index == -1)
             {
                 index = Utilities.ReadNumberWithMaxValue(ReadLine(), bikes.Count);
             }
-
-            Menu.DisplayOptions(bikes[index].ToString() + "\nWas möchtest du ändern?", new string[] { "Hersteller", "Modell", "Leistung (W)" });
+            Menu.DisplayOptions(bikes[index].ToString() + "\nWas möchtest du ändern?", new string[] { "Hersteller", "Modell", "Leistung (W)", "Kategorie" });
 
 
             Write("\n");
@@ -66,6 +84,12 @@ namespace GreenBikes.Controller
                 case 3:
                     Write("Leistung (W): ");
                     bikes[index].Power = Utilities.ReadByte();
+                    break;
+                case 4:
+                    List<BikeCategory> categories = Utilities.LoadList(new BikeCategory()); // Leeres Objekt für den XMLSerializer ä: in die methode
+                    Utilities.ListItems(categories);
+                    Write("Kategorie?: ");
+                    bikes[index].Category = categories[Utilities.ReadNumberWithMaxValue(ReadLine(), categories.Count)];
                     break;
             }
 
