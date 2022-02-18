@@ -30,29 +30,26 @@ namespace GreenBikes.Controller
             newBike.MaximumSpeed = maximumSpeed;
 
             bikeCategories.Add(newBike);
-            bikeCategories.Add(newBike);
-            ListItems(bikeCategories);
+
+
+            Utilities.ListItems(bikeCategories);
             Utilities.Save(bikeCategories);
         }
-        public void ListItems<T>(List<T> list)
+        public void Load()
         {
-            Write("\n");
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (i % 2 == 0)
-                {
-                    ForegroundColor = ConsoleColor.Black;
-                    BackgroundColor = ConsoleColor.White;
-                }
-                else
-                {
-
-                    ForegroundColor = ConsoleColor.White;
-                    BackgroundColor = ConsoleColor.Black;
-                }
-                WriteLine(i + 1 + ". " + list[i].ToString());
-                ResetColor();
-            }
+            bikeCategories = Utilities.LoadList(new BikeCategory()); // Leeres Objekt für den XMLSerializer
         }
+
+        public void Delete(string input)
+        {
+            int index = Utilities.ReadNumberWithMaxValue(input, bikeCategories.Count);
+            bikeCategories.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
+            Utilities.Save(bikeCategories);
+        }
+        public void Edit(string input)
+        {
+
+        }
+
     }
 }

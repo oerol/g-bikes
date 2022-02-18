@@ -38,6 +38,8 @@ namespace GreenBikes
             DisplayOptions(title, options);
 
             BikeCategoryController controller = new BikeCategoryController();
+            controller.Load();
+
             switch (GetPressedKey())
             {
                 case 1:
@@ -48,10 +50,41 @@ namespace GreenBikes
                     BikeCategoryMenu();
                     break;
                 case 2:
-                    controller.ListItems(controller.bikeCategories);
+                    BikeListMenu();
+                    break;
+                default:
+                    BikeCategoryMenu();
                     break;
             }
 
+        }
+
+        public void BikeListMenu()
+        {
+            string title = "Liste aller Fahrradkategorien:";
+            string[] options = { "Bearbeiten", "Löschen", "Zurück" };
+            DisplayOptions(title, options);
+
+            BikeCategoryController controller = new BikeCategoryController();
+            controller.Load();
+
+            Utilities.ListItems(controller.bikeCategories);
+
+            switch (GetPressedKey())
+            {
+                case 1:
+                    break;
+                case 2:
+                    Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
+                    controller.Delete(ReadLine());
+                    break;
+                case 3:
+                    BikeCategoryMenu();
+                    break;
+                default:
+                    BikeListMenu();
+                    break;
+            }
         }
 
         private void DisplayOptions(string title, string[] options)
@@ -61,13 +94,13 @@ namespace GreenBikes
 
             for (int i = 0; i < options.Length; i++)
             {
-                string spacer = $" > {i + 1}. ";
+                string spacer = $" >> {i + 1}. ";
                 WriteLine(spacer + options[i]);
             }
         }
         private uint GetPressedKey()
         {
-            ConsoleKey pressedKey = ReadKey().Key;
+            ConsoleKey pressedKey = ReadKey(true).Key;
 
             switch (pressedKey)
             {

@@ -75,7 +75,9 @@ namespace GreenBikes.Controller
 
             XmlSerializer serializer = GetSerializer<T>();
             WriteLine(serializer.ToString());
-            using (StreamWriter writer = new StreamWriter(list[0].GetType().Name + ".xml"))
+
+
+            using (StreamWriter writer = new StreamWriter(list.GetType().GetGenericArguments()[0].Name + ".xml"))
             {
                 serializer.Serialize(writer, list);
             }
@@ -87,17 +89,64 @@ namespace GreenBikes.Controller
             return serializer;
         }
 
-        public static void LoadList()
+        public static List<T> LoadList<T>(T element)
         {
-            BikeCategory u = new BikeCategory();
-            XmlSerializer serializer = GetSerializer<BikeCategory>();
-            using (FileStream myFileStream = new FileStream(u.GetType().Name + ".xml", FileMode.Open))
+            List<T> list = new List<T>();
+            XmlSerializer serializer = GetSerializer<T>();
+            try
             {
-                // Deserialize-Methode aufrufen und Return-Wert casten
-                u = (BikeCategory)serializer.Deserialize(myFileStream);
+                using (FileStream myFileStream = new FileStream(element.GetType().Name + ".xml", FileMode.Open))
+                {
+                    // Deserialize-Methode aufrufen und Return-Wert casten
+                    list = (List<T>)serializer.Deserialize(myFileStream);
+                    return list;
+                }
             }
-            WriteLine("LOADEDXML: " + u.ToString());
+            catch (FileNotFoundException)
+            {
+                return list; // Übergebe leere Liste, falls keine gespeicherte Datei vorliegt
+            }
 
+
+        }
+        public static void ListItems<T>(List<T> list)
+        {
+            Write("\n");
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    ForegroundColor = ConsoleColor.Black;
+                    BackgroundColor = ConsoleColor.White;
+                }
+                else
+                {
+
+                    ForegroundColor = ConsoleColor.White;
+                    BackgroundColor = ConsoleColor.Black;
+                }
+                WriteLine(i + 1 + ". " + list[i].ToString());
+                ResetColor();
+            }
+        }
+        public static int ReadNumberWithMaxValue(string input, int maxValue)
+        {
+            int index;
+            try
+            {
+                index = int.Parse(input) - 1;
+            }
+            catch (FormatException)
+            {
+                Write($"Bitte wähle einen Wert zwischen 1 und {maxValue}: ");
+                return ReadNumberWithMaxValue(ReadLine(), maxValue);
+            }
+            if (index > maxValue - 1) // Ersetzt das Fangen der ArgumentOutOutOfRange Exception 
+            {
+                Write($"Bitte wähle einen Wert zwischen 1 und {maxValue}: ");
+                return ReadNumberWithMaxValue(ReadLine(), maxValue);
+            }
+            return index;
         }
     }
 }
