@@ -1,4 +1,5 @@
-﻿using GreenBikes.Controller;
+﻿using GreenBikes.Assets;
+using GreenBikes.Controller;
 using System;
 using static System.Console;
 
@@ -8,9 +9,12 @@ namespace GreenBikes
     {
         public void StartMenu()
         {
-            string title = "Welcome to Green Bikes. How can I help you?";
-            string[] options = { "Bike Categories" };
+
+            string title = MenuTitles.start + "\n\nWillkommen bei Green Bikes!\n(Wähle einen Menüpunkt aus, indem du die dazugehörige Zahl auf deiner Tastatur drückst)";
+            string[] options = { "Fahrradkategorien [Übersicht]", "Fahrräder [Übersicht]" };
             DisplayOptions(title, options);
+
+
 
             //Utilities.Save();
             //Utilities.LoadList();
@@ -26,15 +30,21 @@ namespace GreenBikes
                 case 1:
                     BikeCategoryMenu();
                     break;
-
+                case 2:
+                    BikeMenu();
+                    break;
+                default:
+                    StartMenu();
+                    break;
 
             }
         }
 
+
         public void BikeCategoryMenu()
         {
-            string title = "Bike Category";
-            string[] options = { "Create", "List" };
+            string title = MenuTitles.bikeCategory + "\nHier dreht sich alles um Fahrradkategorien.\nWähle eine Aktion.";
+            string[] options = { "Eine neue Fahrradkategorie erstellen", "Liste aller Fahrradkategorien", "Zurück" };
             DisplayOptions(title, options);
 
             BikeCategoryController controller = new BikeCategoryController();
@@ -50,7 +60,10 @@ namespace GreenBikes
                     BikeCategoryMenu();
                     break;
                 case 2:
-                    BikeListMenu();
+                    BikeCategoryListMenu();
+                    break;
+                case 3:
+                    StartMenu();
                     break;
                 default:
                     BikeCategoryMenu();
@@ -59,9 +72,9 @@ namespace GreenBikes
 
         }
 
-        public void BikeListMenu()
+        public void BikeCategoryListMenu()
         {
-            string title = "Liste aller Fahrradkategorien:";
+            string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Fahrradkategorien.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
             string[] options = { "Bearbeiten", "Löschen", "Zurück" };
             DisplayOptions(title, options);
 
@@ -73,13 +86,84 @@ namespace GreenBikes
             switch (GetPressedKey())
             {
                 case 1:
+                    Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
+                    controller.Edit();
                     break;
                 case 2:
-                    Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
-                    controller.Delete(ReadLine());
+                    do
+                    {
+                        Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
+
+                        Utilities.RemoveEntry(controller.bikeCategories);
+                    } while (GetChoice("Wiederholen?"));
+                    BikeCategoryListMenu();
                     break;
                 case 3:
                     BikeCategoryMenu();
+                    break;
+                default:
+                    BikeCategoryListMenu();
+                    break;
+            }
+        }
+        public void BikeMenu()
+        {
+            string title = MenuTitles.bikeCategory + "\nHier dreht sich alles um Fahrräder.\nWähle eine Aktion.";
+            string[] options = { "Eine neues Fahrrad erstellen", "Liste aller Fahrräder", "Zurück" };
+            DisplayOptions(title, options);
+
+            BikeController controller = new BikeController();
+            controller.Load();
+
+            switch (GetPressedKey())
+            {
+                case 1:
+                    do
+                    {
+                        controller.CreateBike();
+                    } while (GetChoice("Wiederholen?"));
+                    BikeCategoryMenu();
+                    break;
+                case 2:
+                    BikeListMenu();
+                    break;
+                case 3:
+                    StartMenu();
+                    break;
+                default:
+                    BikeMenu();
+                    break;
+            }
+        }
+
+        public void BikeListMenu()
+        {
+            string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Fahrräder.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
+            string[] options = { "Bearbeiten", "Löschen", "Zurück" };
+            DisplayOptions(title, options);
+
+            BikeController controller = new BikeController();
+            controller.Load();
+
+            Utilities.ListItems(controller.bikes);
+
+            switch (GetPressedKey())
+            {
+                case 1:
+                    Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
+                    controller.Edit();
+                    break;
+                case 2:
+                    do
+                    {
+
+
+                        Utilities.RemoveEntry(controller.bikes);
+                    } while (controller.bikes.Count != 0 && GetChoice("Wiederholen?"));
+                    BikeListMenu();
+                    break;
+                case 3:
+                    BikeMenu();
                     break;
                 default:
                     BikeListMenu();
@@ -87,7 +171,7 @@ namespace GreenBikes
             }
         }
 
-        private void DisplayOptions(string title, string[] options)
+        public static void DisplayOptions(string title, string[] options)
         {
             Clear();
             WriteLine(title + "\n");
@@ -98,7 +182,7 @@ namespace GreenBikes
                 WriteLine(spacer + options[i]);
             }
         }
-        private uint GetPressedKey()
+        public static uint GetPressedKey()
         {
             ConsoleKey pressedKey = ReadKey(true).Key;
 
@@ -122,7 +206,7 @@ namespace GreenBikes
             }
             return 0;
         }
-        private bool GetChoice(string prompt)
+        public static bool GetChoice(string prompt)
         {
             ConsoleKey pressedKey;
 

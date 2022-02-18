@@ -1,4 +1,5 @@
-﻿using GreenBikes.Models;
+﻿using GreenBikes.Assets;
+using GreenBikes.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +12,8 @@ namespace GreenBikes.Controller
         public void CreateBikeCategory()
         {
             Clear();
+            WriteLine(MenuTitles.create + "\n\nHier kannst du eine neue Fahrradkategorie erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
+
             Write("Name: ");
             string name = Utilities.ReadString();
 
@@ -23,16 +26,13 @@ namespace GreenBikes.Controller
             Write("Maximale Geschwindigkeit: ");
             byte maximumSpeed = Utilities.ReadByte();
 
-            BikeCategory newBike = new BikeCategory();
-            newBike.Name = name;
-            newBike.DailyFee = dailyFee;
-            newBike.WeeklyFee = weeklyFee;
-            newBike.MaximumSpeed = maximumSpeed;
+            BikeCategory newBikeCategory = new BikeCategory();
+            newBikeCategory.Name = name;
+            newBikeCategory.DailyFee = dailyFee;
+            newBikeCategory.WeeklyFee = weeklyFee;
+            newBikeCategory.MaximumSpeed = maximumSpeed;
 
-            bikeCategories.Add(newBike);
-
-
-            Utilities.ListItems(bikeCategories);
+            bikeCategories.Add(newBikeCategory);
             Utilities.Save(bikeCategories);
         }
         public void Load()
@@ -40,14 +40,55 @@ namespace GreenBikes.Controller
             bikeCategories = Utilities.LoadList(new BikeCategory()); // Leeres Objekt für den XMLSerializer
         }
 
-        public void Delete(string input)
+        public void Delete()
         {
-            int index = Utilities.ReadNumberWithMaxValue(input, bikeCategories.Count);
+
+            int index = Utilities.ReadNumberWithMaxValue(ReadLine(), bikeCategories.Count);
             bikeCategories.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
             Utilities.Save(bikeCategories);
         }
-        public void Edit(string input)
+        public void Edit(int index = -1)
         {
+            if (index == -1)
+            {
+                index = Utilities.ReadNumberWithMaxValue(ReadLine(), bikeCategories.Count);
+            }
+
+            Menu.DisplayOptions(bikeCategories[index].ToString() + "\nWas möchtest du ändern?", new string[] { "Name", "Tägliche Gebühr", "Wöchentliche Gebühr", "Maximale Geschwindigkeit" });
+
+
+            Write("\n");
+            switch (Menu.GetPressedKey())
+            {
+                case 1:
+                    Write("Name: ");
+                    bikeCategories[index].Name = Utilities.ReadString();
+                    break;
+                case 2:
+                    Write("Tägliche Gebühr: ");
+                    bikeCategories[index].DailyFee = Utilities.ReadFloat();
+                    break;
+                case 3:
+                    Write("Wöchentliche Gebühr: ");
+                    bikeCategories[index].WeeklyFee = Utilities.ReadFloat();
+                    break;
+                case 4:
+                    Write("Maximale Geschwindigkeit: ");
+                    bikeCategories[index].MaximumSpeed = Utilities.ReadByte();
+                    break;
+            }
+
+            Utilities.Save(bikeCategories);
+            WriteLine("\n >> " + bikeCategories[index].ToString());
+
+            if (Menu.GetChoice("Änderung wurde vorgenommen. Möchtest du noch etwas ändern?"))
+            {
+                Edit(index); // Wiederholt das Bearbeiten, überspringt aber das Abfragen des Index
+            }
+            else
+            {
+                new Menu().BikeListMenu();
+            }
 
         }
 

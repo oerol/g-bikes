@@ -74,7 +74,6 @@ namespace GreenBikes.Controller
         {
 
             XmlSerializer serializer = GetSerializer<T>();
-            WriteLine(serializer.ToString());
 
 
             using (StreamWriter writer = new StreamWriter(list.GetType().GetGenericArguments()[0].Name + ".xml"))
@@ -141,12 +140,32 @@ namespace GreenBikes.Controller
                 Write($"Bitte wähle einen Wert zwischen 1 und {maxValue}: ");
                 return ReadNumberWithMaxValue(ReadLine(), maxValue);
             }
-            if (index > maxValue - 1) // Ersetzt das Fangen der ArgumentOutOutOfRange Exception 
+            if (index > maxValue - 1 || index < 0) // Ersetzt das spätere Fangen der ArgumentOutOutOfRange Exception 
             {
                 Write($"Bitte wähle einen Wert zwischen 1 und {maxValue}: ");
                 return ReadNumberWithMaxValue(ReadLine(), maxValue);
             }
+
             return index;
+        }
+        public static List<T> RemoveEntry<T>(List<T> list)
+        {
+            if (list.Count == 0)
+            {
+                WriteLine("Keine Einträge zum Löschen verfügbar!");
+                System.Threading.Thread.Sleep(700); // Danach wird der Warnhinweis ausgeblendet
+                return list;
+            }
+            else
+            {
+                Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
+                int index = Utilities.ReadNumberWithMaxValue(ReadLine(), list.Count);
+
+                list.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
+                Save(list);
+
+                return list;
+            }
         }
     }
 }

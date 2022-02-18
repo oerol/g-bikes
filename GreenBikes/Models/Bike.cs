@@ -4,10 +4,16 @@ using System.Text;
 
 namespace GreenBikes.Models
 {
-    internal class Bike
+    public class Bike
     {
         public string Manufacturer { get; set; }
         public string Model { get; set; }
-        public uint Power { get; set; } // Einheit: Watt
+        public uint Power { get; set; }
+
+        override public string ToString()
+        {
+            return $"Hersteller: {Manufacturer}, Modell: {Model}, Leistung (W): {Power}";
+        }
     }
+
 }
