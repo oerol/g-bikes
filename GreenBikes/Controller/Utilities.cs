@@ -270,13 +270,15 @@ namespace GreenBikes.Controller
             string[] translatedProperties = GetGermanProperties(modelList[index]);
             Menu.DisplayOptions(modelList[index].ToString() + askForIndex, translatedProperties);
 
-            uint pressedKey = Menu.GetPressedKey() - 1;
+            // uint pressedKey = Menu.GetPressedKey() - 1;
+
+            int pressedKey = Menu.GetPressedKey(modelList[index].GetType().GetProperties().Length) - 1;
 
 
 
             var chosenProperty = modelList[index].GetType().GetProperties()[pressedKey];
 
-            if (ignore.Contains(chosenProperty.Name))
+            if (ignore != null && ignore.Contains(chosenProperty.Name))
             {
                 return index;
             }

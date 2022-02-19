@@ -32,49 +32,10 @@ namespace GreenBikes.Controller
             bikeCategories.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
             Utilities.Save(bikeCategories);
         }
-        public void Edit(int index = -1)
+        public void Edit()
         {
-            if (index == -1)
-            {
-                index = Utilities.ReadNumberWithMaxValue(ReadLine(), bikeCategories.Count);
-            }
-
-            Menu.DisplayOptions(bikeCategories[index].ToString() + "\nWas möchtest du ändern?", new string[] { "Name", "Tägliche Gebühr", "Wöchentliche Gebühr", "Maximale Geschwindigkeit" });
-
-
-            Write("\n");
-            switch (Menu.GetPressedKey())
-            {
-                case 1:
-                    Write("Name: ");
-                    bikeCategories[index].Name = Utilities.ReadString();
-                    break;
-                case 2:
-                    Write("Tägliche Gebühr: ");
-                    bikeCategories[index].DailyFee = Utilities.ReadFloat();
-                    break;
-                case 3:
-                    Write("Wöchentliche Gebühr: ");
-                    bikeCategories[index].WeeklyFee = Utilities.ReadFloat();
-                    break;
-                case 4:
-                    Write("Maximale Geschwindigkeit: ");
-                    bikeCategories[index].MaximumSpeed = Utilities.ReadByte();
-                    break;
-            }
-
-            Utilities.Save(bikeCategories);
-            WriteLine("\n >> " + bikeCategories[index].ToString());
-
-            if (Menu.GetChoice("Änderung wurde vorgenommen. Möchtest du noch etwas ändern?"))
-            {
-                Edit(index); // Wiederholt das Bearbeiten, überspringt aber das Abfragen des Index
-            }
-            else
-            {
-                new Menu().BikeListMenu();
-            }
-
+            Utilities.EditEntry(bikeCategories);
+            new Menu().BikeCategoryListMenu();
         }
 
     }

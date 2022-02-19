@@ -19,7 +19,7 @@ namespace GreenBikes
             //Utilities.Save();
             //Utilities.LoadList();
             BikeCategoryController bikeCategoryController = new BikeCategoryController();
-            switch (GetPressedKey())
+            switch (GetPressedKey(3))
             {
                 case 0: // Tests
                     do
@@ -50,7 +50,7 @@ namespace GreenBikes
             BikeCategoryController controller = new BikeCategoryController();
             controller.Load();
 
-            switch (GetPressedKey())
+            switch (GetPressedKey(3))
             {
                 case 1:
                     do
@@ -83,10 +83,9 @@ namespace GreenBikes
 
             Utilities.ListItems(controller.bikeCategories);
 
-            switch (GetPressedKey())
+            switch (GetPressedKey(3))
             {
                 case 1:
-                    Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
                     controller.Edit();
                     break;
                 case 2:
@@ -115,7 +114,7 @@ namespace GreenBikes
             BikeController controller = new BikeController();
             controller.Load();
 
-            switch (GetPressedKey())
+            switch (GetPressedKey(3))
             {
                 case 1:
                     do
@@ -147,7 +146,7 @@ namespace GreenBikes
 
             Utilities.ListItems(controller.bikes);
 
-            switch (GetPressedKey())
+            switch (GetPressedKey(3))
             {
                 case 1:
                     controller.Edit();
@@ -179,29 +178,40 @@ namespace GreenBikes
                 WriteLine(spacer + options[i]);
             }
         }
-        public static uint GetPressedKey()
+        public static int GetPressedKey(int maxLength)
         {
             ConsoleKey pressedKey = ReadKey(true).Key;
 
+            int selected = 0;
             switch (pressedKey)
             {
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
-                    return 1;
+                    selected = 1;
+                    break;
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
-                    return 2;
+                    selected = 2;
+                    break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-                    return 3;
+                    selected = 3;
+                    break;
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
-                    return 4;
+                    selected = 4;
+                    break;
                 case ConsoleKey.D5:
                 case ConsoleKey.NumPad5:
-                    return 5;
+                    selected = 5;
+                    break;
             }
-            return 0;
+            if (selected > maxLength)
+            {
+                WriteLine($"\nBitte gib eine Zahl unter {maxLength} ein.");
+                GetPressedKey(maxLength);
+            }
+            return selected;
         }
         public static bool GetChoice(string prompt)
         {
