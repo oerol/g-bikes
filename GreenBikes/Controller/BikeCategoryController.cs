@@ -14,23 +14,8 @@ namespace GreenBikes.Controller
             Clear();
             WriteLine(MenuTitles.create + "\n\nHier kannst du eine neue Fahrradkategorie erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
 
-            Write("Name: ");
-            string name = Utilities.ReadString();
-
-            Write("Tägliche Gebühr: ");
-            float dailyFee = Utilities.ReadFloat();
-
-            Write("Wöchentliche Gebühr: ");
-            float weeklyFee = Utilities.ReadFloat();
-
-            Write("Maximale Geschwindigkeit: ");
-            byte maximumSpeed = Utilities.ReadByte();
-
             BikeCategory newBikeCategory = new BikeCategory();
-            newBikeCategory.Name = name;
-            newBikeCategory.DailyFee = dailyFee;
-            newBikeCategory.WeeklyFee = weeklyFee;
-            newBikeCategory.MaximumSpeed = maximumSpeed;
+            Utilities.CreateEntry(newBikeCategory);
 
             bikeCategories.Add(newBikeCategory);
             Utilities.Save(bikeCategories);

@@ -14,19 +14,8 @@ namespace GreenBikes.Controller
             Clear();
             WriteLine("\n\nHier kannst du eine neues Fahrrad eintragen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
 
-            Write("Hersteller: ");
-            string manufacturer = Utilities.ReadString();
-
-            Write("Modell: ");
-            string model = Utilities.ReadString();
-
-            Write("Leistung (W): ");
-            byte power = Utilities.ReadByte();
-
             Bike newBike = new Bike();
-            newBike.Manufacturer = manufacturer;
-            newBike.Model = model;
-            newBike.Power = power;
+            Utilities.CreateEntry(newBike, new string[] { "Category" }); // Um davor die Liste der Kategorien anzuzeigen, wird der Wert für Kategorie selber bestimmt
 
             List<BikeCategory> categories = Utilities.LoadList(new BikeCategory()); // Leeres Objekt für den XMLSerializer ä: in die methode
             Utilities.ListItems(categories);
@@ -34,8 +23,6 @@ namespace GreenBikes.Controller
             Write("\nZu welcher Kategorie gehört dieses Fahrrad?: ");
             int index = Utilities.ReadNumberWithMaxValue(ReadLine(), categories.Count);
             newBike.Category = categories[index];
-
-
 
             bikes.Add(newBike);
             Utilities.Save(bikes);

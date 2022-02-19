@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 using static System.Console;
+using System.Linq;
 
 namespace GreenBikes.Controller
 {
@@ -69,6 +70,27 @@ namespace GreenBikes.Controller
                 }
             }
             return number;
+        }
+        public static uint ReadUint()
+        {
+            uint number = 0;
+            try
+            {
+                number = uint.Parse(ReadLine());
+                return number;
+            }
+            catch (Exception e)
+            {
+                if (e is OverflowException)
+                {
+                    Write("Dein Wert scheint zu hoch zu sein, versuche es erneut:  ");
+                }
+                else if (e is FormatException)
+                {
+                    Write(errorMessage);
+                }
+                return ReadUint();
+            }
         }
         public static void Save<T>(List<T> list)
         {
@@ -165,6 +187,38 @@ namespace GreenBikes.Controller
                 Save(list);
 
                 return list;
+            }
+        }
+        public static void CreateEntry<T>(T model, string[] ignore = null) where T : IModel
+        {
+            foreach (var property in model.GetType().GetProperties())
+            {
+                if (ignore != null)
+                {
+                    if (ignore.Contains(property.Name))
+                    {
+                        continue;
+                    }
+                }
+                string spacer = ": ";
+                Write(model.ToGerman(property.Name) + spacer);
+
+                if (property.PropertyType == typeof(string))
+                {
+                    property.SetValue(model, ReadString());
+                }
+                else if (property.PropertyType == typeof(byte))
+                {
+                    property.SetValue(model, ReadByte());
+                }
+                else if (property.PropertyType == typeof(float))
+                {
+                    property.SetValue(model, ReadFloat());
+                }
+                else if (property.PropertyType == typeof(uint))
+                {
+                    property.SetValue(model, ReadUint());
+                }
             }
         }
     }

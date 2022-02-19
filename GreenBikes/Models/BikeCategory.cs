@@ -4,9 +4,8 @@ using System.Text;
 
 namespace GreenBikes.Models
 {
-    public class BikeCategory
+    public class BikeCategory : IModel
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public float DailyFee { get; set; }
         public float WeeklyFee { get; set; }
@@ -15,6 +14,26 @@ namespace GreenBikes.Models
         override public string ToString()
         {
             return $"Name: {Name}, Gebühr (T): {DailyFee}, Gebühr (W): {WeeklyFee}, Höchstgeschwindigkeit: {MaximumSpeed}";
+        }
+        public string ToGerman(string englishText)
+        {
+            string translatedText = "";
+            switch (englishText)
+            {
+                case "Name": // Zur Vollständigkeit
+                    translatedText = "Name";
+                    break;
+                case "DailyFee":
+                    translatedText = "Tägliche Gebühr";
+                    break;
+                case "WeeklyFee":
+                    translatedText = "Wöchentliche Gebühr";
+                    break;
+                case "MaximumSpeed":
+                    translatedText = "Maximale Geschwindigkeit";
+                    break;
+            }
+            return translatedText;
         }
     }
 }
