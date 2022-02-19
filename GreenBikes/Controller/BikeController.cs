@@ -12,7 +12,7 @@ namespace GreenBikes.Controller
         public void CreateBike()
         {
             Clear();
-            WriteLine("\n\nHier kannst du eine neues Fahrrad eintragen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
+            WriteLine(Assets.MenuTitles.create + "\n\nHier kannst du eine neues Fahrrad eintragen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
 
             Bike newBike = new Bike();
             Utilities.CreateEntry(newBike, new string[] { "Category" }); // Um davor die Liste der Kategorien anzuzeigen, wird der Wert für Kategorie selber bestimmt
@@ -53,8 +53,9 @@ namespace GreenBikes.Controller
             if (index != -1)
             {
                 List<BikeCategory> categories = Utilities.LoadList(new BikeCategory()); // Leeres Objekt für den XMLSerializer ä: in die methode
+                WriteLine("Wähle eine Kategorie aus der untenstehenden Liste:");
                 Utilities.ListItems(categories);
-                Write("Kategorie?: ");
+                Write("\nKategorie: ");
                 int chosenCategory = Utilities.ReadNumberWithMaxValue(ReadLine(), categories.Count);
                 bikes[index].Category = categories[chosenCategory];
 

@@ -192,6 +192,7 @@ namespace GreenBikes.Controller
         }
         public static void CreateEntry<T>(T model, string[] ignore = null) where T : IModel
         {
+
             foreach (var property in model.GetType().GetProperties())
             {
                 if (ignore != null)
@@ -268,9 +269,9 @@ namespace GreenBikes.Controller
                 index = Utilities.ReadNumberWithMaxValue(ReadLine(), modelList.Count);
             }
             string[] translatedProperties = GetGermanProperties(modelList[index]);
-            Menu.DisplayOptions(modelList[index].ToString() + askForIndex, translatedProperties);
+            string editPrompt = Assets.MenuTitles.edit + "\n>>> " + modelList[index].ToString() + askForIndex;
+            Menu.DisplayOptions(editPrompt, translatedProperties);
 
-            // uint pressedKey = Menu.GetPressedKey() - 1;
 
             int pressedKey = Menu.GetPressedKey(modelList[index].GetType().GetProperties().Length) - 1;
 

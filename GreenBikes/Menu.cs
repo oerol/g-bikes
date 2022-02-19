@@ -19,7 +19,7 @@ namespace GreenBikes
             //Utilities.Save();
             //Utilities.LoadList();
             BikeCategoryController bikeCategoryController = new BikeCategoryController();
-            switch (GetPressedKey(3))
+            switch (GetPressedKey(2))
             {
                 case 0: // Tests
                     do
@@ -177,6 +177,7 @@ namespace GreenBikes
                 string spacer = $" >> {i + 1}. ";
                 WriteLine(spacer + options[i]);
             }
+            Write("\n");
         }
         public static int GetPressedKey(int maxLength)
         {
@@ -205,11 +206,27 @@ namespace GreenBikes
                 case ConsoleKey.NumPad5:
                     selected = 5;
                     break;
+                case ConsoleKey.D6:
+                case ConsoleKey.NumPad6:
+                    selected = 6;
+                    break;
+                case ConsoleKey.D7:
+                case ConsoleKey.NumPad7:
+                    selected = 7;
+                    break;
+                case ConsoleKey.D8:
+                case ConsoleKey.NumPad8:
+                    selected = 8;
+                    break;
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
+                    selected = 9;
+                    break;
             }
             if (selected > maxLength)
             {
-                WriteLine($"\nBitte gib eine Zahl unter {maxLength} ein.");
-                GetPressedKey(maxLength);
+                Write($"\rBitte gib eine Zahl unter {maxLength} ein.");
+                return GetPressedKey(maxLength);
             }
             return selected;
         }
