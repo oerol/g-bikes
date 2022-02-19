@@ -11,15 +11,16 @@ namespace GreenBikes
         {
 
             string title = MenuTitles.start + "\n\nWillkommen bei Green Bikes!\n(Wähle einen Menüpunkt aus, indem du die dazugehörige Zahl auf deiner Tastatur drückst)";
-            string[] options = { "Fahrradkategorien [Übersicht]", "Fahrräder [Übersicht]" };
+            string[] options = { "Fahrradkategorien [Übersicht]", "Fahrräder [Übersicht]", "Kunden [Übersicht]" };
             DisplayOptions(title, options);
 
-
+            // TODO defaults entfernen bei switch
+            // TODO getpressedkey mit options.length stuern
 
             //Utilities.Save();
             //Utilities.LoadList();
             BikeCategoryController bikeCategoryController = new BikeCategoryController();
-            switch (GetPressedKey(2))
+            switch (GetPressedKey(options.Length))
             {
                 case 0: // Tests
                     do
@@ -33,8 +34,8 @@ namespace GreenBikes
                 case 2:
                     BikeMenu();
                     break;
-                default:
-                    StartMenu();
+                case 3:
+                    CustomerMenu();
                     break;
 
             }
@@ -163,6 +164,36 @@ namespace GreenBikes
                     break;
                 default:
                     BikeListMenu();
+                    break;
+            }
+        }
+
+        public void CustomerMenu()
+        {
+            string title = MenuTitles.customer + "\nWillkommen zur Kundenübersicht.\nWähle eine Aktion.";
+            string[] options = { "Einen neuen Kunden erstellen", "Liste aller Kunden", "Zurück" };
+            DisplayOptions(title, options);
+
+            CustomerController controller = new CustomerController();
+            controller.Load();
+
+            switch (GetPressedKey(3))
+            {
+                case 1:
+                    do
+                    {
+                        controller.CreateCustomer();
+                    } while (GetChoice("Kunde wurde erfolgreich erstellt! Eine weitere erstellen?"));
+                    BikeCategoryMenu();
+                    break;
+                case 2:
+                    BikeCategoryListMenu();
+                    break;
+                case 3:
+                    StartMenu();
+                    break;
+                default:
+                    BikeCategoryMenu();
                     break;
             }
         }

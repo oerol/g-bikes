@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using static System.Console;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace GreenBikes.Controller
 {
@@ -14,22 +15,58 @@ namespace GreenBikes.Controller
     {
         private static string errorMessage = "Bitte versuche es erneut: ";
 
-        public static string ReadString()
+        public static string ReadString(uint mode = 0)
         {
-            string result = "";
-            while (result == "")
+            string result = ReadLine();
+
+            if (mode == 0)
             {
-                result = ReadLine();
                 if (result != "")
                 {
                     return result;
                 }
-                else
+            }
+            else if (mode == 1)
+            {
+                Regex noNumbers = new Regex("^[a-zA-Z]+$");
+                bool containsNoNumbers = noNumbers.IsMatch(result);
+                if (containsNoNumbers)
                 {
-                    Write(errorMessage);
+                    return result;
                 }
             }
-            return result;
+            else if (mode == 2)
+            {
+                Regex noNumbers = new Regex("^[0-9]+$");
+                bool containsOnlyNumbers = noNumbers.IsMatch(result);
+                if (containsOnlyNumbers)
+                {
+                    return result;
+                }
+            }
+            else if (mode == 3)
+            {
+                string bankAccountNumberCountry = "DE";
+                Regex noNumbers = new Regex($"^{bankAccountNumberCountry}");
+                bool correctBankAccountNumber = noNumbers.IsMatch(result);
+                if (correctBankAccountNumber)
+                {
+                    return result;
+                }
+                Write($"Die IBAN muss mit {bankAccountNumberCountry} anfangen: ");
+            }
+            Write(errorMessage);
+            return ReadString();
+            //string result = ReadLine();
+            //if (result != "")
+            //{
+            //    return result;
+            //}
+            //else
+            //{
+            //    Write(errorMessage);
+            //    return ReadString();
+            //}
         }
         public static float ReadFloat()
         {
@@ -92,6 +129,10 @@ namespace GreenBikes.Controller
                 }
                 return ReadUint();
             }
+        }
+        public static bool ReadBool()
+        {
+            return Menu.GetChoice("Wähle weise");
         }
         public static void Save<T>(List<T> list)
         {
@@ -221,7 +262,19 @@ namespace GreenBikes.Controller
                 {
                     property.SetValue(model, ReadUint());
                 }
+                else if (property.PropertyType == typeof(bool))
+                {
+                    property.SetValue(model, Menu.GetChoice(""));
+                    Write("\n");
+                }
             }
+        }
+
+        public static void SpecificStringOptions()
+        {
+            List<string> noNumbersCustomer = new List<string> { "", "LastName" };
+            string[] noNumbers = { "FirstName" };
+            List<string> onlyNumbersCustomer = new List<string> { "", "LastName" };
         }
 
         public static void SetPropertyValue<T>(T model, PropertyInfo property, string[] ignore = null) where T : IModel
