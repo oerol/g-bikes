@@ -56,7 +56,7 @@ namespace GreenBikes
                     do
                     {
                         controller.CreateBikeCategory();
-                    } while (GetChoice("Fahrrad wurde erfolgreich erstellt! Ein weiteres erstellen?"));
+                    } while (GetChoice("Fahrradkategorie wurde erfolgreich erstellt! Eine weitere erstellen?"));
                     BikeCategoryMenu();
                     break;
                 case 2:
@@ -121,7 +121,7 @@ namespace GreenBikes
                     do
                     {
                         controller.CreateBike();
-                    } while (GetChoice("Wiederholen?"));
+                    } while (GetChoice("Fahrrad wurde erfolgreich erstellt! Ein weiteres erstellen ?"));
                     BikeMenu();
                     break;
                 case 2:
