@@ -6,8 +6,8 @@ namespace GreenBikes
     {
         static void Main(string[] args)
         {
-            Menu menu = new Menu();
-            menu.StartMenu();
+            // new Menu().StartMenu();
+            new Test().Run();
         }
     }
 }

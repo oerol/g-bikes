@@ -98,7 +98,7 @@ namespace GreenBikes.Controller
 
             if (Menu.GetChoice("Änderung wurde vorgenommen. Möchtest du noch etwas ändern?"))
             {
-                Edit(index); // Wiederholt das Bearbeiten, überspringt aber das Abfragen des Index
+                Edit(index); // Wiederholt das Bearbeiten, überspringt aber das Abfragen des Index Ä: lieber oben
             }
             else
             {
