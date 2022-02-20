@@ -17,7 +17,7 @@ namespace GreenBikes.Models
         }
         public string ToGerman(string englishText)
         {
-            string translatedText = "";
+            string translatedText;
             switch (englishText)
             {
                 case "Name": // Zur Vollständigkeit
@@ -31,6 +31,9 @@ namespace GreenBikes.Models
                     break;
                 case "MaximumSpeed":
                     translatedText = "Maximale Geschwindigkeit";
+                    break;
+                default:
+                    translatedText = "<<FEHLERHAFTE ÜBERSETZUNG>>";
                     break;
             }
             return translatedText;

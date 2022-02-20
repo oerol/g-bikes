@@ -50,47 +50,43 @@ namespace GreenBikes
             WriteLine(person.Age);
         }
 
-        public void Run2()
+        public void ReadDate()
         {
+            string input = ReadLine();
+            uint dateLength = 8;
 
-            Customer customer = new Customer();
-            Person person = new Person();
+            string formatError = "Gib das Datum bitte im Format TT.MM.JJ an: ";
+            string formatException = "Etwas stimmt mit deinem Datum nicht. Bitte probiere es erneut: ";
 
-
-            if (person.GetType().BaseType == typeof(object))
+            if (input.Length == dateLength)
             {
-                Write("JAAAAAAAAAAAAAAAAAAAAAAAAa");
-                List<string> parentProperties = new List<string>();
-                foreach (var property in customer.GetType().BaseType.GetProperties())
-                {
-                    parentProperties.Add(property.Name);
-                    // Do Stuffä
-                }
-                foreach (var property in customer.GetType().GetProperties())
-                {
-                    if (!parentProperties.Contains(property.Name))
-                    {
-                        Write("MEW" + property.Name);
-                        // Do Stuff
+                string[] dateComponents = input.Split('.'); // Zum Testen des Formats
 
+                foreach (string component in dateComponents)
+                {
+                    if (component.Length != 2)
+                    {
+                        Write(formatError);
+                        ReadDate();
                     }
                 }
+                try
+                {
+                    DateTime date = DateTime.Parse(input);
+                    WriteLine(date.ToString());
+
+                }
+                catch (FormatException) // Stimmt das Format TT.MM.JJ, so wird geprüft ob das Datum auch richtig ist
+                {
+
+                    Write(formatException);
+                    ReadDate();
+                }
             }
-
-
-            int count = 0;
-
-
-            WriteLine("\n");
-            WriteLine(count);
-
-            WriteLine("TEST" + person.GetType().BaseType.ToString());
-            WriteLine("TEST" + person.GetType().BaseType.Name);
-            WriteLine("TEST" + customer.GetType().BaseType);
-
-            foreach (var property in new Person().GetType().BaseType.GetProperties())
+            else
             {
-                WriteLine(property);
+                Write(formatError);
+                ReadDate();
             }
         }
     }

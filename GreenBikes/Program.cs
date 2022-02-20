@@ -9,7 +9,9 @@ namespace GreenBikes
             // TODO: Fahrad nur bei vorhandenen Fahrradkategorien erstellen
             // TODO: iban beim editieren optionalisieren
             new Menu().StartMenu();
-            //new Test().Run2();
+
+            // Console.Write("Startdatum: "); // REMOVE ME
+            //new Test().ReadDate();
         }
     }
 }

@@ -276,6 +276,44 @@ namespace GreenBikes.Controller
 
             return index;
         }
+        public static DateTime ReadDate()
+        {
+            string input = ReadLine();
+            uint dateLength = 8;
+
+            string formatError = "Gib das Datum bitte im Format TT.MM.JJ an: ";
+            string formatException = "Etwas stimmt mit deinem Datum nicht. Bitte probiere es erneut: ";
+
+            if (input.Length == dateLength)
+            {
+                string[] dateComponents = input.Split('.'); // Zum Testen des Formats
+
+                foreach (string component in dateComponents)
+                {
+                    if (component.Length != 2)
+                    {
+                        Write(formatError);
+                        return ReadDate();
+                    }
+                }
+                try
+                {
+                    DateTime date = DateTime.Parse(input);
+                    return date;
+                }
+                catch (FormatException) // Stimmt das Format TT.MM.JJ, so wird geprüft ob das Datum auch richtig ist
+                {
+
+                    Write(formatException);
+                    return ReadDate();
+                }
+            }
+            else
+            {
+                Write(formatError);
+                return ReadDate();
+            }
+        }
         public static List<T> RemoveEntry<T>(List<T> list)
         {
             if (list.Count == 0)
@@ -351,6 +389,7 @@ namespace GreenBikes.Controller
         }
 
 
+
         public static void SetPropertyValue<T>(T model, PropertyInfo property, string[] ignore = null) where T : IModel
         {
             if (ignore != null)
@@ -381,6 +420,10 @@ namespace GreenBikes.Controller
             {
                 property.SetValue(model, Menu.GetChoice(""));
                 Write("\n");
+            }
+            else if (property.PropertyType == typeof(DateTime))
+            {
+                property.SetValue(model, ReadDate());
             }
         }
         public static int EditEntry<T>(List<T> modelList, string[] ignore = null, int index = -1) where T : IModel

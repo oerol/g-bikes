@@ -11,7 +11,7 @@ namespace GreenBikes
         {
 
             string title = MenuTitles.start + "\n\nWillkommen bei Green Bikes!\n(Wähle einen Menüpunkt aus, indem du die dazugehörige Zahl auf deiner Tastatur drückst)";
-            string[] options = { "Fahrradkategorien [Übersicht]", "Fahrräder [Übersicht]", "Kunden [Übersicht]" };
+            string[] options = { "Fahrradkategorien [Übersicht]", "Fahrräder [Übersicht]", "Kunden [Übersicht]", "Buchungen [Übersicht]" };
             DisplayOptions(title, options);
 
             // TODO defaults entfernen bei switch
@@ -22,12 +22,6 @@ namespace GreenBikes
             BikeCategoryController bikeCategoryController = new BikeCategoryController();
             switch (GetPressedKey(options.Length))
             {
-                case 0: // Tests
-                    do
-                    {
-                        bikeCategoryController.CreateBikeCategory();
-                    } while (GetChoice("Wiederholen?"));
-                    break;
                 case 1:
                     BikeCategoryMenu();
                     break;
@@ -37,10 +31,12 @@ namespace GreenBikes
                 case 3:
                     CustomerMenu();
                     break;
+                case 4:
+                    BookingMenu();
+                    break;
 
             }
         }
-
 
         public void BikeCategoryMenu()
         {
@@ -206,7 +202,7 @@ namespace GreenBikes
 
             Utilities.ListItems(controller.customers);
 
-            switch (GetPressedKey(3))
+            switch (GetPressedKey(options.Length))
             {
                 case 1:
                     controller.Edit();
@@ -221,8 +217,61 @@ namespace GreenBikes
                 case 3:
                     CustomerMenu();
                     break;
-                default:
-                    BikeListMenu();
+            }
+        }
+
+        public void BookingMenu()
+        {
+            string title = MenuTitles.booking + "\nWillkommen zur Buchungsübersicht.\nWähle eine Aktion.";
+            string[] options = { "Eine neue Buchung erstellen", "Liste aller Buchungen", "Zurück" };
+            DisplayOptions(title, options);
+
+            BookingController controller = new BookingController();
+            controller.Load();
+
+            switch (GetPressedKey(options.Length))
+            {
+                case 1:
+                    do
+                    {
+                        controller.CreateBooking();
+                    } while (GetChoice("\nBuchung wurde erfolgreich erstellt! Einen weitere erstellen?"));
+                    BookingMenu();
+                    break;
+                case 2:
+                    BookingListMenu();
+                    break;
+                case 3:
+                    StartMenu();
+                    break;
+            }
+        }
+
+        public void BookingListMenu()
+        {
+            string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Buchungen.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
+            string[] options = { "Bearbeiten", "Löschen", "Zurück" };
+            DisplayOptions(title, options);
+
+            BookingController controller = new BookingController();
+            controller.Load();
+
+            Utilities.ListItems(controller.bookings);
+
+            switch (GetPressedKey(options.Length))
+            {
+                case 1:
+                    controller.Edit();
+                    break;
+                case 2:
+                    do
+                    {
+                        Utilities.RemoveEntry(controller.bookings);
+                    } while (controller.bookings.Count != 0 && GetChoice("Eintrag gelöscht! Wiederholen?"));
+                    BookingListMenu();
+                    break;
+                case 3:
+                    BookingMenu();
                     break;
             }
         }

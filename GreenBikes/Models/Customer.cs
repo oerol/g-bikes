@@ -13,7 +13,7 @@ namespace GreenBikes.Models
 
         public string ToGerman(string englishText)
         {
-            string translatedText = "";
+            string translatedText;
             switch (englishText)
             {
                 case "DrivingLicense":

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GreenBikes.Models
 {
-    public class Person : Base
+    public class Person
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

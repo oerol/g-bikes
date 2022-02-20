@@ -6,6 +6,6 @@ namespace GreenBikes.Models
 {
     public interface IModel
     {
-        public string ToGerman(string name);
+        public string ToGerman(string englishText);
     }
 }
