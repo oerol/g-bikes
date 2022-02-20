@@ -13,50 +13,65 @@ namespace GreenBikes.Controller
 {
     public class Utilities
     {
+        // TODO: ReadString in einzelne Methoden
         private static string errorMessage = "Bitte versuche es erneut: ";
+        private static string noNumbersMessage = "Hier sind nur Buchstaben erlaubt. " + errorMessage;
+        private static string onlyNumbersMessage = "Hier sind nur Zahlen erlaubt. " + errorMessage;
 
         public static string ReadString(uint mode = 0)
         {
             string result = ReadLine();
 
-            if (mode == 0)
+            if (result != "")
             {
-                if (result != "")
+
+                if (mode == 0)
                 {
                     return result;
                 }
-            }
-            else if (mode == 1)
-            {
-                Regex noNumbers = new Regex("^[a-zA-Z]+$");
-                bool containsNoNumbers = noNumbers.IsMatch(result);
-                if (containsNoNumbers)
+                else if (mode == 1)
                 {
-                    return result;
+                    Regex noNumbers = new Regex("^[a-zA-Z]+$");
+                    bool containsNoNumbers = noNumbers.IsMatch(result);
+                    if (containsNoNumbers)
+                    {
+                        return result;
+                    }
+                    Write(noNumbersMessage);
+                    return ReadString(1);
+                }
+                else if (mode == 2)
+                {
+                    uint minLength = 11;
+                    uint maxLength = 13;
+
+                    if (result.Length >= 11 && result.Length <= 13)
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        Write($"Eine Handynummer muss zwischen {minLength} und {maxLength} Zeichen haben: ");
+                        return ReadString(2);
+                    }
+
+                }
+                else if (mode == 3)
+                {
+                    string bankAccountNumberCountry = "DE";
+                    Regex startsWith = new Regex($"^{bankAccountNumberCountry}");
+                    bool correctBankAccountNumber = startsWith.IsMatch(result.ToUpper()); // ToUpper() um Fälle wie "de", "De" abzufangen 
+                    if (correctBankAccountNumber)
+                    {
+                        return result;
+                    }
+                    Write($"IBAN muss mit {bankAccountNumberCountry} starten: {errorMessage}");
+                    return ReadString(3);
                 }
             }
-            else if (mode == 2)
-            {
-                Regex noNumbers = new Regex("^[0-9]+$");
-                bool containsOnlyNumbers = noNumbers.IsMatch(result);
-                if (containsOnlyNumbers)
-                {
-                    return result;
-                }
-            }
-            else if (mode == 3)
-            {
-                string bankAccountNumberCountry = "DE";
-                Regex noNumbers = new Regex($"^{bankAccountNumberCountry}");
-                bool correctBankAccountNumber = noNumbers.IsMatch(result);
-                if (correctBankAccountNumber)
-                {
-                    return result;
-                }
-                Write($"Die IBAN muss mit {bankAccountNumberCountry} anfangen: ");
-            }
+
             Write(errorMessage);
-            return ReadString();
+            return ReadString(mode);
             //string result = ReadLine();
             //if (result != "")
             //{
@@ -109,13 +124,34 @@ namespace GreenBikes.Controller
             }
             return number;
         }
-        public static uint ReadUint()
+        public static uint ReadUint(int minLength = 0, int maxLength = 0)
         {
-            uint number = 0;
+            uint number;
             try
             {
                 number = uint.Parse(ReadLine());
-                return number;
+                if (minLength == 0 && maxLength == 0)
+                {
+                    return number;
+                }
+                else
+                {
+                    if (number.ToString().Length >= minLength && number.ToString().Length <= maxLength)
+                    {
+                        return number;
+                    }
+
+                    if (minLength != maxLength)
+                    {
+                        Write($"Deine Eingabe muss zwischen {minLength} und {maxLength} Zeichen haben: ");
+                    }
+                    else
+                    {
+                        Write($"Deine Eingabe muss zwischen genau {maxLength} Zeichen haben: ");
+
+                    }
+                    return ReadUint(minLength, maxLength);
+                }
             }
             catch (Exception e)
             {
@@ -125,9 +161,9 @@ namespace GreenBikes.Controller
                 }
                 else if (e is FormatException)
                 {
-                    Write(errorMessage);
+                    Write(onlyNumbersMessage);
                 }
-                return ReadUint();
+                return ReadUint(minLength, maxLength);
             }
         }
         public static bool ReadBool()
@@ -246,35 +282,44 @@ namespace GreenBikes.Controller
                 string spacer = ": ";
                 Write(model.ToGerman(property.Name) + spacer);
 
-                if (property.PropertyType == typeof(string))
-                {
-                    property.SetValue(model, ReadString());
-                }
-                else if (property.PropertyType == typeof(byte))
-                {
-                    property.SetValue(model, ReadByte());
-                }
-                else if (property.PropertyType == typeof(float))
-                {
-                    property.SetValue(model, ReadFloat());
-                }
-                else if (property.PropertyType == typeof(uint))
-                {
-                    property.SetValue(model, ReadUint());
-                }
-                else if (property.PropertyType == typeof(bool))
-                {
-                    property.SetValue(model, Menu.GetChoice(""));
-                    Write("\n");
-                }
+                SetPropertyValue(model, property);
             }
         }
 
-        public static void SpecificStringOptions()
+        public static string SpecificStringOptions(string property)
         {
-            List<string> noNumbersCustomer = new List<string> { "", "LastName" };
-            string[] noNumbers = { "FirstName" };
-            List<string> onlyNumbersCustomer = new List<string> { "", "LastName" };
+            string[] noNumbers = { "FirstName", "LastName", "City" };
+
+            string bankAccountNumber = "BankAccountNumber";
+            string phoneNumber = "PhoneNumber";
+
+            if (noNumbers.Contains(property))
+            {
+                return ReadString(1);
+            }
+            else if (phoneNumber == property)
+            {
+                return ReadString(2);
+            }
+            else if (bankAccountNumber == property)
+            {
+                return ReadString(3);
+            }
+            else
+            {
+                return ReadString();
+            }
+        }
+        public static uint SpecificUintOptions(string property)
+        {
+            if (property == "PostalCode")
+            {
+                return ReadUint(5, 5);
+            }
+            else
+            {
+                return ReadUint();
+            }
         }
 
         public static void SetPropertyValue<T>(T model, PropertyInfo property, string[] ignore = null) where T : IModel
@@ -287,10 +332,9 @@ namespace GreenBikes.Controller
                 }
             }
 
-
             if (property.PropertyType == typeof(string))
             {
-                property.SetValue(model, ReadString());
+                property.SetValue(model, SpecificStringOptions(property.Name));
             }
             else if (property.PropertyType == typeof(byte))
             {
@@ -302,7 +346,12 @@ namespace GreenBikes.Controller
             }
             else if (property.PropertyType == typeof(uint))
             {
-                property.SetValue(model, ReadUint());
+                property.SetValue(model, SpecificUintOptions(property.Name));
+            }
+            else if (property.PropertyType == typeof(bool))
+            {
+                property.SetValue(model, Menu.GetChoice(""));
+                Write("\n");
             }
         }
         public static int EditEntry<T>(List<T> modelList, string[] ignore = null, int index = -1) where T : IModel

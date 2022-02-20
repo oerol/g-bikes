@@ -7,7 +7,7 @@ namespace GreenBikes.Models
     public class Customer : Person, IModel
     {
         public bool DrivingLicense { get; set; }
-        public uint PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } // String, da keine Rechnungen durchgeführt werden müssen
         public string BankAccountNumber { get; set; }
 
         public string ToGerman(string englishText)
