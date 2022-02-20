@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using static System.Console;
 
 namespace GreenBikes
@@ -45,6 +46,17 @@ namespace GreenBikes
             }
             WriteLine(person.Name);
             WriteLine(person.Age);
+        }
+
+        public void Run2()
+        {
+            string iban = "DE00360605910001965466";
+            string nums = iban.Remove(0, 4);
+            WriteLine(nums.Length);
+            ulong numbersOnly = ulong.Parse(Regex.Match(nums, @"\d+").Value);
+            ulong rechnung = 98 - (numbersOnly % 97);
+            WriteLine(rechnung);
+
         }
     }
     internal class Person

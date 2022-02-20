@@ -17,8 +17,12 @@ namespace GreenBikes.Controller
             WriteLine(MenuTitles.create + "\n\nHier kannst du einen neuen Kunden erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
 
             Customer newCustomer = new Customer();
-            Utilities.CreateEntry(newCustomer);
-
+            Utilities.CreateEntry(newCustomer, new string[] { "BankAccountNumber" });
+            if (Menu.GetChoice("IBAN angeben?"))
+            {
+                Write("\nIBAN: ");
+                newCustomer.BankAccountNumber = Utilities.ReadString(3);
+            };
             customers.Add(newCustomer);
             Utilities.Save(customers);
         }

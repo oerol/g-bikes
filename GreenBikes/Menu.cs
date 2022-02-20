@@ -183,7 +183,7 @@ namespace GreenBikes
                     do
                     {
                         controller.CreateCustomer();
-                    } while (GetChoice("Kunde wurde erfolgreich erstellt! Eine weitere erstellen?"));
+                    } while (GetChoice("\nKunde wurde erfolgreich erstellt! Einen weiteren erstellen?"));
                     CustomerMenu();
                     break;
                 case 2:

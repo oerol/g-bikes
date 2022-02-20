@@ -50,6 +50,7 @@ namespace GreenBikes.Controller
                         return result;
                     }
                     return ReadString(3);
+
                 }
             }
 
@@ -91,10 +92,17 @@ namespace GreenBikes.Controller
         {
             string bankAccountNumberCountry = "DE";
             Regex startsWith = new Regex($"^{bankAccountNumberCountry}");
-            bool correctBankAccountNumber = startsWith.IsMatch(input.ToUpper()); // ToUpper() um Fälle wie "de", "De" abzufangen 
-            if (correctBankAccountNumber)
+            bool correctCountryCode = startsWith.IsMatch(input.ToUpper()); // ToUpper() um Fälle wie "de", "De" abzufangen 
+            if (correctCountryCode)
             {
-                return true;
+                uint bankAccountNumberLength = 22;
+                if (input.Length == bankAccountNumberLength)
+                {
+                    return true;
+                }
+                Write($"IBAN muss eine Länge von {bankAccountNumberLength} Zeichen besitzen {errorMessage}");
+                return false;
+
             }
             else
             {
@@ -341,6 +349,7 @@ namespace GreenBikes.Controller
                 return ReadUint();
             }
         }
+
 
         public static void SetPropertyValue<T>(T model, PropertyInfo property, string[] ignore = null) where T : IModel
         {

@@ -8,7 +8,7 @@ namespace GreenBikes
         {
             // TODO: Fahrad nur bei vorhandenen Fahrradkategorien erstellen
             new Menu().StartMenu();
-            //new Test().Run();
+            //new Test().Run2();
         }
     }
 }
