@@ -24,64 +24,84 @@ namespace GreenBikes.Controller
 
             if (result != "")
             {
-
                 if (mode == 0)
                 {
                     return result;
                 }
                 else if (mode == 1)
                 {
-                    Regex noNumbers = new Regex("^[a-zA-Z]+$");
-                    bool containsNoNumbers = noNumbers.IsMatch(result);
-                    if (containsNoNumbers)
+                    if (ReadAlphabetical(result))
                     {
                         return result;
                     }
-                    Write(noNumbersMessage);
                     return ReadString(1);
                 }
                 else if (mode == 2)
                 {
-                    uint minLength = 11;
-                    uint maxLength = 13;
-
-                    if (result.Length >= 11 && result.Length <= 13)
+                    if (ReadPhoneNumber(result))
                     {
                         return result;
                     }
-                    else
-                    {
-                        Write($"Eine Handynummer muss zwischen {minLength} und {maxLength} Zeichen haben: ");
-                        return ReadString(2);
-                    }
-
+                    return ReadString(2);
                 }
                 else if (mode == 3)
                 {
-                    string bankAccountNumberCountry = "DE";
-                    Regex startsWith = new Regex($"^{bankAccountNumberCountry}");
-                    bool correctBankAccountNumber = startsWith.IsMatch(result.ToUpper()); // ToUpper() um Fälle wie "de", "De" abzufangen 
-                    if (correctBankAccountNumber)
+                    if (ReadBankAccountNumber(result))
                     {
                         return result;
                     }
-                    Write($"IBAN muss mit {bankAccountNumberCountry} starten: {errorMessage}");
                     return ReadString(3);
                 }
             }
 
             Write(errorMessage);
             return ReadString(mode);
-            //string result = ReadLine();
-            //if (result != "")
-            //{
-            //    return result;
-            //}
-            //else
-            //{
-            //    Write(errorMessage);
-            //    return ReadString();
-            //}
+        }
+
+        private static bool ReadAlphabetical(string input)
+        {
+            Regex noNumbers = new Regex("^[a-zA-Z]+$");
+            bool containsNoNumbers = noNumbers.IsMatch(input);
+            if (containsNoNumbers)
+            {
+                return true;
+            }
+            else
+            {
+                Write(noNumbersMessage);
+                return false;
+            }
+        }
+        private static bool ReadPhoneNumber(string input)
+        {
+            uint minLength = 11;
+            uint maxLength = 13;
+
+            if (input.Length >= 11 && input.Length <= 13)
+            {
+                return true;
+            }
+            else
+            {
+                Write($"Eine Handynummer muss zwischen {minLength} und {maxLength} Zeichen haben: ");
+
+            }
+            return false;
+        }
+        private static bool ReadBankAccountNumber(string input)
+        {
+            string bankAccountNumberCountry = "DE";
+            Regex startsWith = new Regex($"^{bankAccountNumberCountry}");
+            bool correctBankAccountNumber = startsWith.IsMatch(input.ToUpper()); // ToUpper() um Fälle wie "de", "De" abzufangen 
+            if (correctBankAccountNumber)
+            {
+                return true;
+            }
+            else
+            {
+                Write($"IBAN muss mit {bankAccountNumberCountry} starten: {errorMessage}");
+                return false;
+            }
         }
         public static float ReadFloat()
         {
