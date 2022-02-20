@@ -184,16 +184,45 @@ namespace GreenBikes
                     {
                         controller.CreateCustomer();
                     } while (GetChoice("Kunde wurde erfolgreich erstellt! Eine weitere erstellen?"));
-                    BikeCategoryMenu();
+                    CustomerMenu();
                     break;
                 case 2:
-                    BikeCategoryListMenu();
+                    CustomerListMenu();
                     break;
                 case 3:
                     StartMenu();
                     break;
+            }
+        }
+
+        public void CustomerListMenu()
+        {
+            string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Fahrräder.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
+            string[] options = { "Bearbeiten", "Löschen", "Zurück" };
+            DisplayOptions(title, options);
+
+            CustomerController controller = new CustomerController();
+            controller.Load();
+
+            Utilities.ListItems(controller.customers);
+
+            switch (GetPressedKey(3))
+            {
+                case 1:
+                    controller.Edit();
+                    break;
+                case 2:
+                    do
+                    {
+                        Utilities.RemoveEntry(controller.customers);
+                    } while (controller.customers.Count != 0 && GetChoice("Eintrag gelöscht! Wiederholen?"));
+                    CustomerListMenu();
+                    break;
+                case 3:
+                    CustomerMenu();
+                    break;
                 default:
-                    BikeCategoryMenu();
+                    BikeListMenu();
                     break;
             }
         }

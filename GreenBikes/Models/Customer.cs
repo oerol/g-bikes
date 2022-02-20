@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GreenBikes.Controller;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -44,6 +45,10 @@ namespace GreenBikes.Models
                     break;
             }
             return translatedText;
+        }
+        public override string ToString()
+        {
+            return $"Vorname: {FirstName}, Nachname: {LastName}, Telefonnummer: {PhoneNumber} Stadt: {City}, Straße: {Street}, Postleitzahl: {PostalCode}, AM-Führerschein: {Utilities.TranslateBool(DrivingLicense)}, IBAN: {BankAccountNumber}";
         }
     }
 }

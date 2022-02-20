@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GreenBikes.Models
 {
-    public class Bike : IModel
+    public class Bike : Base, IModel
     {
         public string Manufacturer { get; set; }
         public string Model { get; set; }

@@ -13,7 +13,6 @@ namespace GreenBikes.Controller
 {
     public class Utilities
     {
-        // TODO: ReadString in einzelne Methoden
         private static string errorMessage = "Bitte versuche es erneut: ";
         private static string noNumbersMessage = "Hier sind nur Buchstaben erlaubt. " + errorMessage;
         private static string onlyNumbersMessage = "Hier sind nur Zahlen erlaubt. " + errorMessage;
@@ -230,7 +229,6 @@ namespace GreenBikes.Controller
         }
         public static void ListItems<T>(List<T> list)
         {
-            Write("\n");
             for (int i = 0; i < list.Count; i++)
             {
                 if (i % 2 == 0)
@@ -247,6 +245,8 @@ namespace GreenBikes.Controller
                 WriteLine(i + 1 + ". " + list[i].ToString());
                 ResetColor();
             }
+            Write("\n");
+
         }
         public static int ReadNumberWithMaxValue(string input, int maxValue)
         {
@@ -381,6 +381,7 @@ namespace GreenBikes.Controller
             if (modelList.Count == 0)
             {
                 WriteLine(noEntriesToEdit);
+                System.Threading.Thread.Sleep(700); // Danach wird der Warnhinweis ausgeblendet
                 return -1;
             }
 
@@ -431,6 +432,11 @@ namespace GreenBikes.Controller
                 translatedProperties = translatedProperties.Append(translated).ToArray();
             }
             return translatedProperties;
+        }
+        public static string TranslateBool(bool b)
+        {
+            string translatedText = b ? "Ja" : "Nein";
+            return translatedText;
         }
     }
 }

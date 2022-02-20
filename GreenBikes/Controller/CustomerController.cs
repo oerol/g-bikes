@@ -37,7 +37,7 @@ namespace GreenBikes.Controller
         public void Edit()
         {
             Utilities.EditEntry(customers);
-            // new Menu().CustomerListMenu();
+            new Menu().CustomerListMenu();
         }
 
     }
