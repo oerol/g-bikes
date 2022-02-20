@@ -297,7 +297,6 @@ namespace GreenBikes.Controller
         }
         public static void CreateEntry<T>(T model, string[] ignore = null) where T : IModel
         {
-
             foreach (var property in model.GetType().GetProperties())
             {
                 if (ignore != null)
@@ -312,6 +311,7 @@ namespace GreenBikes.Controller
 
                 SetPropertyValue(model, property);
             }
+
         }
 
         public static string SpecificStringOptions(string property)

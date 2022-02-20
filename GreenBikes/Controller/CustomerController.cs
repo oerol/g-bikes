@@ -22,7 +22,11 @@ namespace GreenBikes.Controller
             {
                 Write("\nIBAN: ");
                 newCustomer.BankAccountNumber = Utilities.ReadString(3);
-            };
+            }
+            else
+            {
+                newCustomer.BankAccountNumber = "<BAR>";
+            }
             customers.Add(newCustomer);
             Utilities.Save(customers);
         }
@@ -38,9 +42,40 @@ namespace GreenBikes.Controller
             customers.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
             Utilities.Save(customers);
         }
-        public void Edit()
+        public void Edit(int index = -1)
         {
-            Utilities.EditEntry(customers);
+            if (index == -1)
+
+            {
+                index = Utilities.EditEntry(customers, new string[] { "BankAccountNumber" });
+            }
+            else
+            {
+                index = Utilities.EditEntry(customers, new string[] { "BankAccountNumber" }, index);
+            }
+
+            if (index != -1)
+            {
+                if (Menu.GetChoice("IBAN angeben?"))
+                {
+                    Write("\nIBAN: ");
+                    customers[index].BankAccountNumber = Utilities.ReadString(3);
+                }
+                else
+                {
+                    customers[index].BankAccountNumber = "<BAR>";
+                }
+
+                Utilities.Save(customers);
+                WriteLine("\n >> " + customers[index].ToString());
+
+
+                if (Menu.GetChoice("Änderung wurde vorgenommen. Möchtest du noch etwas ändern?"))
+                {
+                    Edit(index);
+                }
+            }
+
             new Menu().CustomerListMenu();
         }
 
