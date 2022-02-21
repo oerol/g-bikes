@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GreenBikes.Models
+namespace GreenBikes.Model
 {
     public class Bike : IModel
     {

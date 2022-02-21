@@ -1,5 +1,5 @@
 ﻿using GreenBikes.Controller;
-using GreenBikes.Models;
+using GreenBikes.Model;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
