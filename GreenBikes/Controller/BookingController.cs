@@ -2,6 +2,7 @@
 using GreenBikes.Models;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using static System.Console;
 namespace GreenBikes.Controller
@@ -20,25 +21,9 @@ namespace GreenBikes.Controller
             Write("Enddatum: ");
             GetEndDate(newBooking);
 
-            Write("\n");
-
-            List<Customer> customers = Utilities.LoadList(new Customer()); // Leeres Objekt für den XMLSerializer ä: in die methode
-            Utilities.ListItems(customers);
-
-            Write("\nUm welchen Kunden geht es? (Passe die Größe des Fensters an für eine Bessere Darstellung): ");
-            int customerIndex = Utilities.ReadNumberWithMaxValue(ReadLine(), customers.Count);
-            newBooking.Customer = customers[customerIndex];
-
-            Write("\n");
-
-            List<Bike> bikes = Utilities.LoadList(new Bike()); // Leeres Objekt für den XMLSerializer ä: in die methode
-            Utilities.ListItems(bikes);
-
-            Write("\nWelches Fahrrad wurde gebucht?: ");
-            int bikesIndex = Utilities.ReadNumberWithMaxValue(ReadLine(), bikes.Count);
-            newBooking.Bike = bikes[bikesIndex];
-
-            newBooking.TotalCosts = CalculateTotalCosts(newBooking);
+            SetCustomer(newBooking);
+            SetBike(newBooking);
+            SetTotalCosts(newBooking);
 
             bookings.Add(newBooking);
             Utilities.Save(bookings);
@@ -57,16 +42,41 @@ namespace GreenBikes.Controller
         }
         public void Edit(int index = -1)
         {
-            if (index == -1)
-
+            PropertyInfo property;
+            if (index == -1) // -1 heißt: Es gibt nichts zum Bearbeiten
             {
-                index = Utilities.EditEntry(bookings, new string[] { "BankAccountNumber" });
+                index = Utilities.GetChosenIndex(bookings);
+                property = Utilities.EditEntry(bookings, new string[] { "EndDate", "TotalCosts", "Customer", "Bike" }, index);
+
             }
             else
             {
-                index = Utilities.EditEntry(bookings, new string[] { "BankAccountNumber" }, index);
+                property = Utilities.EditEntry(bookings, new string[] { "EndDate", "TotalCosts", "Customer", "Bike" }, index);
             }
 
+            if (property.Name == "EndDate")
+            {
+                Write("Enddatum: ");
+                GetEndDate(bookings[index]);
+            }
+            else if (property.Name == "Customer")
+            {
+                SetCustomer(bookings[index]);
+            }
+            else if (property.Name == "Bike")
+            {
+                SetBike(bookings[index]);
+            }
+
+            SetTotalCosts(bookings[index]);
+
+            Utilities.Save(bookings);
+            WriteLine("\n >> " + bookings[index].ToString());
+
+            if (Menu.GetChoice("Änderung wurde vorgenommen. Möchtest du noch etwas ändern?"))
+            {
+                Edit(index);
+            }
             new Menu().BookingListMenu();
         }
         private void GetEndDate(Booking booking)
@@ -81,14 +91,36 @@ namespace GreenBikes.Controller
             booking.EndDate = endDate;
 
         }
-        private float CalculateTotalCosts(Booking booking) // wert hier direkt setzen
+        private void SetTotalCosts(Booking booking)
         {
             int days = (booking.EndDate - booking.StartDate).Days;
             int usageInWeeks = days / 7;
             int usageInDays = days % 7;
 
             float totalCosts = usageInWeeks * booking.Bike.Category.WeeklyFee + usageInDays * booking.Bike.Category.DailyFee;
-            return totalCosts;
+            booking.TotalCosts = totalCosts;
+        }
+
+        private void SetCustomer(Booking booking)
+        {
+            Write("\n");
+
+            List<Customer> customers = Utilities.LoadList(new Customer()); // Leeres Objekt für den XMLSerializer ä: in die methode
+            Utilities.ListItems(customers);
+
+            Write("\nUm welchen Kunden geht es? (Passe die Größe des Fensters an für eine Bessere Darstellung): ");
+            int customerIndex = Utilities.ReadNumberWithMaxValue(ReadLine(), customers.Count);
+            booking.Customer = customers[customerIndex];
+        }
+
+        private void SetBike(Booking bike)
+        {
+            List<Bike> bikes = Utilities.LoadList(new Bike()); // Leeres Objekt für den XMLSerializer ä: in die methode
+            Utilities.ListItems(bikes);
+
+            Write("\nWelches Fahrrad soll gebucht werden?: ");
+            int bikesIndex = Utilities.ReadNumberWithMaxValue(ReadLine(), bikes.Count);
+            bike.Bike = bikes[bikesIndex];
         }
     }
 }

@@ -426,37 +426,44 @@ namespace GreenBikes.Controller
                 property.SetValue(model, ReadDate());
             }
         }
-        public static int EditEntry<T>(List<T> modelList, string[] ignore = null, int index = -1) where T : IModel
+        private static bool CheckIfEntriesAreAvailable<T>(List<T> list)
         {
             string noEntriesToEdit = "Keine Einträge zum Bearbeiten verfügbar!";
-            string askForIndex = "\nWas möchtest du ändern?";
-            if (modelList.Count == 0)
+            if (list.Count == 0)
             {
                 WriteLine(noEntriesToEdit);
                 System.Threading.Thread.Sleep(700); // Danach wird der Warnhinweis ausgeblendet
-                return -1;
+                return false;
             }
-
-            if (index == -1) // Fragt Index ab, sofern keiner vorliegt
+            return true;
+        }
+        public static int GetChosenIndex<T>(List<T> list)
+        {
+            int index = -1;
+            if (CheckIfEntriesAreAvailable(list))
             {
-
                 Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
-                index = Utilities.ReadNumberWithMaxValue(ReadLine(), modelList.Count);
+                index = Utilities.ReadNumberWithMaxValue(ReadLine(), list.Count);
+                return index;
             }
+            return index;
+        }
+        public static PropertyInfo EditEntry<T>(List<T> modelList, string[] ignore = null, int index = -1) where T : IModel
+        {
+            string askForIndex = "\nWas möchtest du ändern?";
+            PropertyInfo chosenProperty;
+
             string[] translatedProperties = GetGermanProperties(modelList[index]);
             string editPrompt = Assets.MenuTitles.edit + "\n>>> " + modelList[index].ToString() + askForIndex;
             Menu.DisplayOptions(editPrompt, translatedProperties);
 
-
             int pressedKey = Menu.GetPressedKey(modelList[index].GetType().GetProperties().Length) - 1;
 
-
-
-            var chosenProperty = modelList[index].GetType().GetProperties()[pressedKey];
+            chosenProperty = modelList[index].GetType().GetProperties()[pressedKey];
 
             if (ignore != null && ignore.Contains(chosenProperty.Name))
             {
-                return index;
+                return chosenProperty;
             }
 
             string spacer = ": ";
@@ -468,9 +475,11 @@ namespace GreenBikes.Controller
 
             if (Menu.GetChoice("Änderung wurde vorgenommen. Möchtest du noch etwas ändern?"))
             {
-                EditEntry(modelList, ignore, index);
+                return EditEntry(modelList, ignore, index);
             }
-            return -1;
+
+            return chosenProperty;
+
         }
         private static string[] GetGermanProperties<T>(T model) where T : IModel
         {

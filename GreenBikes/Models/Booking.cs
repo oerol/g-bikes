@@ -39,7 +39,7 @@ namespace GreenBikes.Models
         }
         public override string ToString()
         {
-            return $"Kunde: {Customer.FirstName} {Customer.LastName}, Fahrradkategorie: {Bike.Category.Name}, Fahrrad: {Bike.Model} ({Bike.Manufacturer}), Startdatum: {StartDate.ToShortDateString()}, Enddatum: {EndDate.ToShortDateString()}, Gesamtkosten: {TotalCosts}";
+            return $"Kunde: {Customer.FirstName} {Customer.LastName}, Fahrrad: {Bike.Model} ({Bike.Manufacturer}), Fahrradkategorie: {Bike.Category.Name}, Startdatum: {StartDate.ToShortDateString()}, Enddatum: {EndDate.ToShortDateString()}, Gesamtkosten: {TotalCosts}";
         }
     }
 }

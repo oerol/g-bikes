@@ -1,6 +1,7 @@
 ﻿using GreenBikes.Models;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using static System.Console;
 
@@ -17,12 +18,7 @@ namespace GreenBikes.Controller
             Bike newBike = new Bike();
             Utilities.CreateEntry(newBike, new string[] { "Category" }); // Um davor die Liste der Kategorien anzuzeigen, wird der Wert für Kategorie selber bestimmt
 
-            List<BikeCategory> categories = Utilities.LoadList(new BikeCategory()); // Leeres Objekt für den XMLSerializer ä: in die methode
-            Utilities.ListItems(categories);
-
-            Write("\nZu welcher Kategorie gehört dieses Fahrrad?: ");
-            int index = Utilities.ReadNumberWithMaxValue(ReadLine(), categories.Count);
-            newBike.Category = categories[index];
+            SetCategory(newBike);
 
             bikes.Add(newBike);
             Utilities.Save(bikes);
@@ -40,38 +36,42 @@ namespace GreenBikes.Controller
         }
         public void Edit(int index = -1)
         {
+            PropertyInfo property;
             if (index == -1)
-
             {
-                index = Utilities.EditEntry(bikes, new string[] { "Category" });
+                index = Utilities.GetChosenIndex(bikes); // Frage Index ab, weil keiner vorliegt
+                property = Utilities.EditEntry(bikes, new string[] { "Category" }, index);
+
             }
             else
             {
-                index = Utilities.EditEntry(bikes, new string[] { "Category" }, index);
+                property = Utilities.EditEntry(bikes, new string[] { "Category" }, index);
             }
 
-            if (index != -1)
+            if (property.Name == "Category")
             {
-                List<BikeCategory> categories = Utilities.LoadList(new BikeCategory()); // Leeres Objekt für den XMLSerializer ä: in die methode
-                WriteLine("Wähle eine Kategorie aus der untenstehenden Liste:");
-                Utilities.ListItems(categories);
-                Write("\nKategorie: ");
-                int chosenCategory = Utilities.ReadNumberWithMaxValue(ReadLine(), categories.Count);
-                bikes[index].Category = categories[chosenCategory];
-
-                Utilities.Save(bikes);
-                WriteLine("\n >> " + bikes[index].ToString());
-
-
-                if (Menu.GetChoice("Änderung wurde vorgenommen. Möchtest du noch etwas ändern?"))
-                {
-                    Edit(index);
-                }
+                SetCategory(bikes[index]);
             }
 
+            Utilities.Save(bikes);
+            WriteLine("\n >> " + bikes[index].ToString());
+
+            if (Menu.GetChoice("Änderung wurde vorgenommen. Möchtest du noch etwas ändern?"))
+            {
+                Edit(index);
+            }
             new Menu().BikeListMenu();
-
         }
+        public void SetCategory(Bike bike)
+        {
+            Write("\n");
 
+            List<BikeCategory> categories = Utilities.LoadList(new BikeCategory()); // Leeres Objekt für den XMLSerializer ä: in die methode
+            Utilities.ListItems(categories);
+
+            Write("\nZu welcher Kategorie gehört dieses Fahrrad?: ");
+            int index = Utilities.ReadNumberWithMaxValue(ReadLine(), categories.Count);
+            bike.Category = categories[index];
+        }
     }
 }
