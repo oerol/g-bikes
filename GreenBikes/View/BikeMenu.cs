@@ -17,7 +17,7 @@ namespace GreenBikes.View
             BikeController controller = new BikeController();
             controller.Load();
 
-            switch (Menu.GetPressedKey(3))
+            switch (Menu.GetPressedKey(options.Length))
             {
                 case 1:
                     do
@@ -46,7 +46,7 @@ namespace GreenBikes.View
 
             Utilities.ListItems(controller.bikes);
 
-            switch (Menu.GetPressedKey(3))
+            switch (Menu.GetPressedKey(options.Length))
             {
                 case 1:
                     controller.Edit();

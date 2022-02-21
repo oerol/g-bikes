@@ -15,7 +15,7 @@ namespace GreenBikes.View
             BikeCategoryController controller = new BikeCategoryController();
             controller.Load();
 
-            switch (Menu.GetPressedKey(3))
+            switch (Menu.GetPressedKey(options.Length))
             {
                 case 1:
                     do
