@@ -1,5 +1,6 @@
 ﻿using GreenBikes.Assets;
 using GreenBikes.Controller;
+using GreenBikes.View;
 using System;
 using static System.Console;
 
@@ -12,18 +13,13 @@ namespace GreenBikes
 
             string title = MenuTitles.start + "\n\nWillkommen bei Green Bikes!\n(Wähle einen Menüpunkt aus, indem du die dazugehörige Zahl auf deiner Tastatur drückst)";
             string[] options = { "Fahrradkategorien [Übersicht]", "Fahrräder [Übersicht]", "Kunden [Übersicht]", "Buchungen [Übersicht]" };
-            DisplayOptions(title, options);
+            Utilities.DisplayOptions(title, options);
 
-            // TODO defaults entfernen bei switch
             // TODO getpressedkey mit options.length stuern
-
-            //Utilities.Save();
-            //Utilities.LoadList();
-            BikeCategoryController bikeCategoryController = new BikeCategoryController();
             switch (GetPressedKey(options.Length))
             {
                 case 1:
-                    BikeCategoryMenu();
+                    new BikeCategoryMenu().Start();
                     break;
                 case 2:
                     BikeMenu();
@@ -34,7 +30,6 @@ namespace GreenBikes
                 case 4:
                     BookingMenu();
                     break;
-
             }
         }
 
@@ -42,7 +37,7 @@ namespace GreenBikes
         {
             string title = MenuTitles.bikeCategory + "\nHier dreht sich alles um Fahrradkategorien.\nWähle eine Aktion.";
             string[] options = { "Eine neue Fahrradkategorie erstellen", "Liste aller Fahrradkategorien", "Zurück" };
-            DisplayOptions(title, options);
+            Utilities.DisplayOptions(title, options);
 
             BikeCategoryController controller = new BikeCategoryController();
             controller.Load();
@@ -62,9 +57,6 @@ namespace GreenBikes
                 case 3:
                     StartMenu();
                     break;
-                default:
-                    BikeCategoryMenu();
-                    break;
             }
 
         }
@@ -73,7 +65,7 @@ namespace GreenBikes
         {
             string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Fahrradkategorien.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
             string[] options = { "Bearbeiten", "Löschen", "Zurück" };
-            DisplayOptions(title, options);
+            Utilities.DisplayOptions(title, options);
 
             BikeCategoryController controller = new BikeCategoryController();
             controller.Load();
@@ -97,16 +89,13 @@ namespace GreenBikes
                 case 3:
                     BikeCategoryMenu();
                     break;
-                default:
-                    BikeCategoryListMenu();
-                    break;
             }
         }
         public void BikeMenu()
         {
             string title = MenuTitles.bike + "\nHier dreht sich alles um Fahrräder.\nWähle eine Aktion.";
             string[] options = { "Eine neues Fahrrad erstellen", "Liste aller Fahrräder", "Zurück" };
-            DisplayOptions(title, options);
+            Utilities.DisplayOptions(title, options);
 
             BikeController controller = new BikeController();
             controller.Load();
@@ -126,9 +115,6 @@ namespace GreenBikes
                 case 3:
                     StartMenu();
                     break;
-                default:
-                    BikeMenu();
-                    break;
             }
         }
 
@@ -136,7 +122,7 @@ namespace GreenBikes
         {
             string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Fahrräder.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
             string[] options = { "Bearbeiten", "Löschen", "Zurück" };
-            DisplayOptions(title, options);
+            Utilities.DisplayOptions(title, options);
 
             BikeController controller = new BikeController();
             controller.Load();
@@ -158,9 +144,6 @@ namespace GreenBikes
                 case 3:
                     BikeMenu();
                     break;
-                default:
-                    BikeListMenu();
-                    break;
             }
         }
 
@@ -168,7 +151,7 @@ namespace GreenBikes
         {
             string title = MenuTitles.customer + "\nWillkommen zur Kundenübersicht.\nWähle eine Aktion.";
             string[] options = { "Einen neuen Kunden erstellen", "Liste aller Kunden", "Zurück" };
-            DisplayOptions(title, options);
+            Utilities.DisplayOptions(title, options);
 
             CustomerController controller = new CustomerController();
             controller.Load();
@@ -195,7 +178,7 @@ namespace GreenBikes
         {
             string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Fahrräder.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
             string[] options = { "Bearbeiten", "Löschen", "Zurück" };
-            DisplayOptions(title, options);
+            Utilities.DisplayOptions(title, options);
 
             CustomerController controller = new CustomerController();
             controller.Load();
@@ -224,7 +207,7 @@ namespace GreenBikes
         {
             string title = MenuTitles.booking + "\nWillkommen zur Buchungsübersicht.\nWähle eine Aktion.";
             string[] options = { "Eine neue Buchung erstellen", "Liste aller Buchungen", "Zurück" };
-            DisplayOptions(title, options);
+            Utilities.DisplayOptions(title, options);
 
             BookingController controller = new BookingController();
             controller.Load();
@@ -251,7 +234,7 @@ namespace GreenBikes
         {
             string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Buchungen.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
             string[] options = { "Bearbeiten", "Löschen", "Zurück" };
-            DisplayOptions(title, options);
+            Utilities.DisplayOptions(title, options);
 
             BookingController controller = new BookingController();
             controller.Load();
@@ -276,18 +259,7 @@ namespace GreenBikes
             }
         }
 
-        public static void DisplayOptions(string title, string[] options)
-        {
-            Clear();
-            WriteLine(title + "\n");
 
-            for (int i = 0; i < options.Length; i++)
-            {
-                string spacer = $" >> {i + 1}. ";
-                WriteLine(spacer + options[i]);
-            }
-            Write("\n");
-        }
         public static int GetPressedKey(int maxLength)
         {
             ConsoleKey pressedKey = ReadKey(true).Key;

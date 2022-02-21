@@ -32,7 +32,9 @@ namespace GreenBikes.Controller
         }
         public void Edit()
         {
-            Utilities.EditEntry(bikeCategories);
+            int index = Utilities.GetChosenIndex(bikeCategories); // Frage Index ab, weil keiner vorliegt
+
+            Utilities.EditEntry(bikeCategories, new string[] { }, index);
             new Menu().BikeCategoryListMenu();
         }
 

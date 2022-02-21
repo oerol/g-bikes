@@ -10,11 +10,24 @@ using static System.Console;
 
 namespace GreenBikes.Controller
 {
-    public class Utilities
+    public static class Utilities
     {
         private static string errorMessage = "Bitte versuche es erneut: ";
         private static string noNumbersMessage = "Hier sind nur Buchstaben erlaubt. " + errorMessage;
         private static string onlyNumbersMessage = "Hier sind nur Zahlen erlaubt. " + errorMessage;
+
+        public static void DisplayOptions(string title, string[] options)
+        {
+            Clear();
+            WriteLine(title + "\n");
+
+            for (int i = 0; i < options.Length; i++)
+            {
+                string spacer = $" >> {i + 1}. ";
+                WriteLine(spacer + options[i]);
+            }
+            Write("\n");
+        }
 
         public static string ReadString(uint mode = 0)
         {
@@ -313,13 +326,13 @@ namespace GreenBikes.Controller
                 return ReadDate();
             }
         }
-        public static List<T> RemoveEntry<T>(List<T> list)
+        public static void RemoveEntry<T>(List<T> list)
         {
             if (list.Count == 0)
             {
                 WriteLine("Keine Einträge zum Löschen verfügbar!");
                 System.Threading.Thread.Sleep(700); // Danach wird der Warnhinweis ausgeblendet
-                return list;
+                return;
             }
             else
             {
@@ -328,8 +341,8 @@ namespace GreenBikes.Controller
 
                 list.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
                 Save(list);
-
-                return list;
+                Write("\nEintrag wurde gelöscht!");
+                System.Threading.Thread.Sleep(900);
             }
         }
         public static void CreateEntry<T>(T model, string[] ignore = null) where T : IModel
@@ -454,7 +467,7 @@ namespace GreenBikes.Controller
 
             string[] translatedProperties = GetGermanProperties(modelList[index]);
             string editPrompt = Assets.MenuTitles.edit + "\n>>> " + modelList[index].ToString() + askForIndex;
-            Menu.DisplayOptions(editPrompt, translatedProperties);
+            Utilities.DisplayOptions(editPrompt, translatedProperties);
 
             int pressedKey = Menu.GetPressedKey(modelList[index].GetType().GetProperties().Length) - 1;
 
