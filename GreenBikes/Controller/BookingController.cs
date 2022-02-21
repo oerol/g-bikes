@@ -12,23 +12,40 @@ namespace GreenBikes.Controller
         public List<Booking> bookings = new List<Booking>();
         public void Create()
         {
-            Clear();
-            WriteLine(MenuTitles.create + "\n\nHier kannst du eine neue Buchung erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
+            int bikesCount = Utilities.LoadList(new Bike()).Count;
+            int customersCount = Utilities.LoadList(new Bike()).Count;
+            if (bikesCount > 0 && customersCount > 0)
+            {
+                Clear();
+                WriteLine(MenuTitles.create + "\n\nHier kannst du eine neue Buchung erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
 
-            Booking newBooking = new Booking();
-            Utilities.CreateEntry(newBooking, new string[] { "EndDate", "TotalCosts", "Customer", "Bike" });
+                Booking newBooking = new Booking();
+                Utilities.CreateEntry(newBooking, new string[] { "EndDate", "TotalCosts", "Customer", "Bike" });
 
-            Write("Enddatum: ");
-            GetEndDate(newBooking);
+                Write("Enddatum: ");
+                GetEndDate(newBooking);
 
-            SetCustomer(newBooking);
+                SetCustomer(newBooking);
 
-            SetBike(newBooking);
+                SetBike(newBooking);
 
-            SetTotalCosts(newBooking);
+                SetTotalCosts(newBooking);
 
-            bookings.Add(newBooking);
-            Utilities.Save(bookings);
+                bookings.Add(newBooking);
+                Utilities.Save(bookings);
+
+                if (Menu.GetChoice("Buchung wurde erfolgreich erstellt! Eine weitere erstellen?"))
+                {
+                    Create();
+                }
+            }
+            else
+            {
+                WriteLine("Bitte stelle sicher, dass mindestens eine Fahrradkategorie, ein Fahrrad und ein Kunde existiert!");
+                System.Threading.Thread.Sleep(1500);
+            }
+            new BookingMenu().Start();
+
         }
         public void Load()
         {
@@ -42,7 +59,6 @@ namespace GreenBikes.Controller
             {
                 index = Utilities.GetChosenIndex(bookings);
                 property = Utilities.EditEntry(bookings, new string[] { "EndDate", "TotalCosts", "Customer", "Bike" }, index);
-
             }
             else
             {
@@ -78,12 +94,16 @@ namespace GreenBikes.Controller
         {
             DateTime endDate = Utilities.ReadDate();
 
-            if (booking.StartDate > endDate)
+            if (booking.StartDate <= endDate)
+            {
+                booking.EndDate = endDate;
+            }
+            else
             {
                 Write("Das Enddatum darf nicht vor dem Startdatum liegen. Versuche es bitte erneut: ");
                 GetEndDate(booking);
+
             }
-            booking.EndDate = endDate;
 
         }
         private void SetTotalCosts(Booking booking)
@@ -91,9 +111,18 @@ namespace GreenBikes.Controller
             int days = (booking.EndDate - booking.StartDate).Days;
             int usageInWeeks = days / 7;
             int usageInDays = days % 7;
+            WriteLine(days);
 
-            float totalCosts = usageInWeeks * booking.Bike.Category.WeeklyFee + usageInDays * booking.Bike.Category.DailyFee;
-            booking.TotalCosts = totalCosts;
+            if (days == 0) // Bei gleichem Start- und Enddatum werden kosten in Höhe eines Tages berechnet
+            {
+                booking.TotalCosts = booking.Bike.Category.DailyFee;
+            }
+            else
+            {
+                float totalCosts = usageInWeeks * booking.Bike.Category.WeeklyFee + usageInDays * booking.Bike.Category.DailyFee;
+                booking.TotalCosts = totalCosts;
+            }
+
         }
 
         private void SetCustomer(Booking booking)

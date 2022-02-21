@@ -13,15 +13,32 @@ namespace GreenBikes.Controller
         public List<Customer> customers = new List<Customer>();
         public void Create()
         {
-            Clear();
-            WriteLine(MenuTitles.create + "\n\nHier kannst du einen neuen Kunden erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
+            int bikesCount = Utilities.LoadList(new Bike()).Count;
 
-            Customer newCustomer = new Customer();
-            Utilities.CreateEntry(newCustomer, new string[] { "BankAccountNumber" });
+            if (bikesCount > 0)
+            {
+                Clear();
+                WriteLine(MenuTitles.create + "\n\nHier kannst du einen neuen Kunden erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
 
-            SetBankAccountNumber(newCustomer);
-            customers.Add(newCustomer);
-            Utilities.Save(customers);
+                Customer newCustomer = new Customer();
+                Utilities.CreateEntry(newCustomer, new string[] { "BankAccountNumber" });
+
+                SetBankAccountNumber(newCustomer);
+                customers.Add(newCustomer);
+                Utilities.Save(customers);
+
+                if (Menu.GetChoice("Kunde wurde erfolgreich erstellt! Einen weiteren erstellen?"))
+                {
+                    Create();
+                }
+            }
+            else
+            {
+                WriteLine("Bitte erstelle zuerst ein Fahrrad bevor du einen Kunden erstellst!");
+                System.Threading.Thread.Sleep(700);
+            }
+            new CustomerMenu().Start();
+
         }
         public void Load()
         {

@@ -10,8 +10,8 @@ namespace GreenBikes.View
     {
         public void Start()
         {
-            string title = MenuTitles.customer + "\nWillkommen zur Kundenübersicht.\nWähle eine Aktion.";
-            string[] options = { "Einen neuen Kunden erstellen", "Liste aller Kunden", "Zurück" };
+            string title = MenuTitles.booking + "\nWillkommen zur Buchungsübersicht.\nWähle eine Aktion.";
+            string[] options = { "Eine neue Buchung erstellen", "Liste aller Buchungen", "Zurück" };
             Utilities.DisplayOptions(title, options);
 
             BookingController controller = new BookingController();
@@ -20,11 +20,7 @@ namespace GreenBikes.View
             switch (Menu.GetPressedKey(options.Length))
             {
                 case 1:
-                    do
-                    {
-                        controller.Create();
-                    } while (Menu.GetChoice("Buchung wurde erfolgreich erstellt! Eine weitere erstellen?"));
-                    Start();
+                    controller.Create();
                     break;
                 case 2:
                     List();

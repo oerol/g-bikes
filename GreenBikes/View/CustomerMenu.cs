@@ -20,11 +20,7 @@ namespace GreenBikes.View
             switch (Menu.GetPressedKey(options.Length))
             {
                 case 1:
-                    do
-                    {
-                        controller.Create();
-                    } while (Menu.GetChoice("Kunde wurde erfolgreich erstellt! Einen weiteren erstellen?"));
-                    Start();
+                    controller.Create();
                     break;
                 case 2:
                     List();

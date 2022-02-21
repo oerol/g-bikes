@@ -33,6 +33,10 @@ namespace GreenBikes
         }
         public static int GetPressedKey(int maxLength)
         {
+
+            // Direkter Wechsel zum Menüpunkt, unterstützt jedoch maximal eine Länge von 9 Optionen
+            // In allen anderen Fällen wird Utilities.ReadNumberWithMaxValue() genutzt
+
             ConsoleKey pressedKey = ReadKey(true).Key;
 
             int selected = 0;

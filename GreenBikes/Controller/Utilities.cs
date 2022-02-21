@@ -29,7 +29,7 @@ namespace GreenBikes.Controller
             Write("\n");
         }
 
-        public static string ReadString(uint mode = 0)
+        public static string ReadString(uint mode = 0) // Liest Texte in verschiedenen Modi
         {
             string result = ReadLine();
 
@@ -39,7 +39,7 @@ namespace GreenBikes.Controller
                 {
                     return result;
                 }
-                else if (mode == 1)
+                else if (mode == 1) // Nur Buchstaben
                 {
                     if (ReadAlphabetical(result))
                     {
@@ -47,7 +47,7 @@ namespace GreenBikes.Controller
                     }
                     return ReadString(1);
                 }
-                else if (mode == 2)
+                else if (mode == 2) // Nur für Rufnummern
                 {
                     if (ReadPhoneNumber(result))
                     {
@@ -55,7 +55,7 @@ namespace GreenBikes.Controller
                     }
                     return ReadString(2);
                 }
-                else if (mode == 3)
+                else if (mode == 3) // Nur für IBANs
                 {
                     if (ReadBankAccountNumber(result))
                     {
@@ -74,6 +74,7 @@ namespace GreenBikes.Controller
         {
             Regex noNumbers = new Regex("^[a-zA-Z]+$");
             bool containsNoNumbers = noNumbers.IsMatch(input);
+
             if (containsNoNumbers)
             {
                 return true;
@@ -103,18 +104,19 @@ namespace GreenBikes.Controller
         private static bool ReadBankAccountNumber(string input)
         {
             string bankAccountNumberCountry = "DE";
+            uint bankAccountNumberLength = 22;
+
             Regex startsWith = new Regex($"^{bankAccountNumberCountry}");
             bool correctCountryCode = startsWith.IsMatch(input.ToUpper()); // ToUpper() um Fälle wie "de", "De" abzufangen 
+
             if (correctCountryCode)
             {
-                uint bankAccountNumberLength = 22;
                 if (input.Length == bankAccountNumberLength)
                 {
                     return true;
                 }
                 Write($"IBAN muss eine Länge von {bankAccountNumberLength} Zeichen besitzen {errorMessage}");
                 return false;
-
             }
             else
             {
@@ -122,48 +124,45 @@ namespace GreenBikes.Controller
                 return false;
             }
         }
-        public static float ReadFloat()
+        public static float ReadFloat() // Nimmt an, dass Werte stets positiv sind
         {
-            float number = 0;
-            while (number == 0)
+            try
             {
-                try
+                float number = float.Parse(ReadLine());
+                if (number > 0)
                 {
-                    number = float.Parse(ReadLine());
                     return number;
                 }
-                catch (FormatException)
-                {
-                    Write(errorMessage);
-                }
             }
-            return number;
+            catch (FormatException)
+            {
+                Write(errorMessage);
+                return ReadFloat();
+            }
+            Write(errorMessage);
+            return ReadFloat();
         }
         public static byte ReadByte()
         {
-            byte number = 0;
-            while (number == 0)
+            try
             {
-                try
-                {
-                    number = byte.Parse(ReadLine());
-                    return number;
-                }
-                catch (Exception e)
-                {
-                    if (e is OverflowException)
-                    {
-                        Write("Dein Wert scheint zu hoch zu sein, versuche es erneut:  ");
-                    }
-                    else if (e is FormatException)
-                    {
-                        Write(errorMessage);
-                    }
-                }
+                byte number = byte.Parse(ReadLine());
+                return number;
             }
-            return number;
+            catch (Exception e)
+            {
+                if (e is OverflowException)
+                {
+                    Write("Dein Wert scheint zu hoch zu sein, versuche es erneut:  ");
+                }
+                else if (e is FormatException)
+                {
+                    Write(errorMessage);
+                }
+                return ReadByte();
+            }
         }
-        public static uint ReadUint(int minLength = 0, int maxLength = 0)
+        public static uint ReadUint(int minLength = 0, int maxLength = 0) // Minimum- und Maximumlänge der Eingabe möglich
         {
             uint number;
             try
@@ -205,21 +204,14 @@ namespace GreenBikes.Controller
                 return ReadUint(minLength, maxLength);
             }
         }
-        public static bool ReadBool()
-        {
-            return Menu.GetChoice("Wähle weise");
-        }
         public static void Save<T>(List<T> list)
         {
-
             XmlSerializer serializer = GetSerializer<T>();
-
 
             using (StreamWriter writer = new StreamWriter(list.GetType().GetGenericArguments()[0].Name + ".xml"))
             {
                 serializer.Serialize(writer, list);
             }
-
         }
         public static XmlSerializer GetSerializer<T>()
         {
@@ -233,10 +225,9 @@ namespace GreenBikes.Controller
             XmlSerializer serializer = GetSerializer<T>();
             try
             {
-                using (FileStream myFileStream = new FileStream(element.GetType().Name + ".xml", FileMode.Open))
+                using (FileStream fileStream = new FileStream(element.GetType().Name + ".xml", FileMode.Open))
                 {
-                    // Deserialize-Methode aufrufen und Return-Wert casten
-                    list = (List<T>)serializer.Deserialize(myFileStream);
+                    list = (List<T>)serializer.Deserialize(fileStream);
                     return list;
                 }
             }
@@ -247,7 +238,7 @@ namespace GreenBikes.Controller
 
 
         }
-        public static void ListItems<T>(List<T> list)
+        public static void ListItems<T>(List<T> list) // Zur Anzeige von Einträgen
         {
             for (int i = 0; i < list.Count; i++)
             {
@@ -268,7 +259,7 @@ namespace GreenBikes.Controller
             Write("\n");
 
         }
-        public static int ReadNumberWithMaxValue(string input, int maxValue)
+        public static int ReadNumberWithMaxValue(string input, int maxValue) // Eingabe einer Zahl mit Obergrenze
         {
             int index;
             try
@@ -337,9 +328,10 @@ namespace GreenBikes.Controller
             else
             {
                 Write("\nBitte wähle einen Index aus und bestätige mit ENTER: ");
-                int index = Utilities.ReadNumberWithMaxValue(ReadLine(), list.Count);
 
+                int index = ReadNumberWithMaxValue(ReadLine(), list.Count);
                 list.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
+
                 Save(list);
                 Write("\nEintrag wurde gelöscht!");
                 System.Threading.Thread.Sleep(900);
@@ -361,10 +353,9 @@ namespace GreenBikes.Controller
 
                 SetPropertyValue(model, property);
             }
-
         }
 
-        public static string SpecificStringOptions(string property)
+        public static string SpecificStringOptions(string property) // Einstellen von Ausnahmeszenarien
         {
             string[] noNumbers = { "FirstName", "LastName", "City" };
 
@@ -399,9 +390,7 @@ namespace GreenBikes.Controller
                 return ReadUint();
             }
         }
-
-
-
+        // Setzt Properties dynamisch
         public static void SetPropertyValue<T>(T model, PropertyInfo property, string[] ignore = null) where T : IModel
         {
             if (ignore != null)
@@ -411,7 +400,6 @@ namespace GreenBikes.Controller
                     return;
                 }
             }
-
             if (property.PropertyType == typeof(string))
             {
                 property.SetValue(model, SpecificStringOptions(property.Name));

@@ -9,7 +9,7 @@
 
         override public string ToString()
         {
-            return $"Name: {Name}, Gebühr (T): {DailyFee}, Gebühr (W): {WeeklyFee}, Höchstgeschwindigkeit: {MaximumSpeed}";
+            return $"Name: {Name}, Gebühr (T): {DailyFee}€, Gebühr (W): {WeeklyFee}€, Höchstgeschwindigkeit: {MaximumSpeed}";
         }
         public string ToGerman(string englishText)
         {
@@ -20,13 +20,13 @@
                     translatedText = "Name";
                     break;
                 case "DailyFee":
-                    translatedText = "Tägliche Gebühr";
+                    translatedText = "Tägliche Gebühr (€)";
                     break;
                 case "WeeklyFee":
-                    translatedText = "Wöchentliche Gebühr";
+                    translatedText = "Wöchentliche Gebühr (€)";
                     break;
                 case "MaximumSpeed":
-                    translatedText = "Maximale Geschwindigkeit";
+                    translatedText = "Maximale Geschwindigkeit (KM/H)";
                     break;
                 default:
                     translatedText = "<<FEHLERHAFTE ÜBERSETZUNG>>";

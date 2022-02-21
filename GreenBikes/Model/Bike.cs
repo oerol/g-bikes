@@ -23,7 +23,7 @@
                     translatedText = "Modell";
                     break;
                 case "Power":
-                    translatedText = "Leistung";
+                    translatedText = "Leistung (W)";
                     break;
                 case "Category":
                     translatedText = "Kategorie";

@@ -11,9 +11,9 @@ namespace GreenBikes.Controller
         public List<Bike> bikes = new List<Bike>();
         public void Create()
         {
-            List<BikeCategory> categories = Utilities.LoadList(new BikeCategory());
+            int categoriesCount = Utilities.LoadList(new BikeCategory()).Count;
 
-            if (categories.Count > 0)
+            if (categoriesCount > 0)
             {
                 Clear();
 
@@ -36,8 +36,8 @@ namespace GreenBikes.Controller
             {
                 WriteLine("Bitte erstelle zuerst eine Fahrradkategorie bevor du ein Fahrrad erstellst!");
                 System.Threading.Thread.Sleep(700);
-                new BikeMenu().Start();
             }
+            new BikeMenu().Start();
 
         }
         public void Load()

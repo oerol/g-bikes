@@ -1,21 +1,14 @@
-﻿namespace GreenBikes
+﻿using System;
+using System.Text;
+
+namespace GreenBikes
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            // TODO: Fahrad nur bei vorhandenen Fahrradkategorien erstellen
-            // TODO: iban beim editieren optionalisieren
-            // TODO: methoden im controller modularisieren
-            // TODO: view ordner für menüwechsel
-            // TODO: einheiten
-            // TODO: ignore oben machen
-            // nach hausnummer fragen
-            // TODO: vorraussettungen bei buchungserstellung
+            Console.OutputEncoding = Encoding.UTF8; // Zur Anzeige von Sonderzeichen 
             new Menu().StartMenu();
-
-            // Console.Write("Startdatum: "); // REMOVE ME
-            //new Test().ReadDate();
         }
     }
 }
