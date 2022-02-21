@@ -1,10 +1,5 @@
 ﻿using GreenBikes.Controller;
-using GreenBikes.Model;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 using static System.Console;
 
 namespace GreenBikes

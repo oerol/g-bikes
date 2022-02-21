@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GreenBikes
+﻿namespace GreenBikes
 {
     internal class Program
     {

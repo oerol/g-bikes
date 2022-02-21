@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GreenBikes.Model
+﻿namespace GreenBikes.Model
 {
     public class BikeCategory : IModel
     {

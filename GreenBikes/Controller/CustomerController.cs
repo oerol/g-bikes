@@ -1,9 +1,7 @@
 ﻿using GreenBikes.Assets;
 using GreenBikes.Model;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using static System.Console;
 
 

@@ -1,8 +1,6 @@
 ﻿using GreenBikes.Assets;
 using GreenBikes.Model;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using static System.Console;
 namespace GreenBikes.Controller
 {

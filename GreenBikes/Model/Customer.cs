@@ -1,7 +1,4 @@
 ﻿using GreenBikes.Controller;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GreenBikes.Model
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GreenBikes.Assets
+﻿namespace GreenBikes.Assets
 {
     public static class MenuTitles
     {
