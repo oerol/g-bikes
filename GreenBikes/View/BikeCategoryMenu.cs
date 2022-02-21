@@ -20,7 +20,7 @@ namespace GreenBikes.View
                 case 1:
                     do
                     {
-                        controller.CreateBikeCategory();
+                        controller.Create();
                     } while (Menu.GetChoice("Fahrradkategorie wurde erfolgreich erstellt! Eine weitere erstellen?"));
                     Start();
                     break;

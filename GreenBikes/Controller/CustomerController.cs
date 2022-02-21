@@ -1,5 +1,6 @@
 ﻿using GreenBikes.Assets;
 using GreenBikes.Model;
+using GreenBikes.View;
 using System.Collections.Generic;
 using System.Reflection;
 using static System.Console;
@@ -7,10 +8,10 @@ using static System.Console;
 
 namespace GreenBikes.Controller
 {
-    internal class CustomerController
+    internal class CustomerController : IController
     {
         public List<Customer> customers = new List<Customer>();
-        public void CreateCustomer()
+        public void Create()
         {
             Clear();
             WriteLine(MenuTitles.create + "\n\nHier kannst du einen neuen Kunden erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
@@ -27,12 +28,6 @@ namespace GreenBikes.Controller
             customers = Utilities.LoadList(new Customer()); // Leeres Objekt für den XMLSerializer
         }
 
-        public void Delete()
-        {
-            int index = Utilities.ReadNumberWithMaxValue(ReadLine(), customers.Count);
-            customers.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
-            Utilities.Save(customers);
-        }
         public void Edit(int index = -1)
         {
             PropertyInfo property;
@@ -58,7 +53,7 @@ namespace GreenBikes.Controller
             {
                 Edit(index);
             }
-            new Menu().CustomerListMenu();
+            new CustomerMenu().List();
         }
         private void SetBankAccountNumber(Customer customer)
         {

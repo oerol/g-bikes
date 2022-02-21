@@ -11,6 +11,7 @@
             // TODO: einheiten
             // TODO: ignore oben machen
             // nach hausnummer fragen
+            // TODO: vorraussettungen bei buchungserstellung
             new Menu().StartMenu();
 
             // Console.Write("Startdatum: "); // REMOVE ME

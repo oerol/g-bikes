@@ -1,13 +1,14 @@
 ﻿using GreenBikes.Assets;
 using GreenBikes.Model;
+using GreenBikes.View;
 using System.Collections.Generic;
 using static System.Console;
 namespace GreenBikes.Controller
 {
-    internal class BikeCategoryController
+    internal class BikeCategoryController : IController
     {
         public List<BikeCategory> bikeCategories = new List<BikeCategory>();
-        public void CreateBikeCategory()
+        public void Create()
         {
             Clear();
             WriteLine(MenuTitles.create + "\n\nHier kannst du eine neue Fahrradkategorie erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
@@ -30,12 +31,12 @@ namespace GreenBikes.Controller
             bikeCategories.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
             Utilities.Save(bikeCategories);
         }
-        public void Edit()
+        public void Edit(int index = -1) // Einzige Klasse, die den Parameter nicht braucht
         {
-            int index = Utilities.GetChosenIndex(bikeCategories); // Frage Index ab, weil keiner vorliegt
+            index = Utilities.GetChosenIndex(bikeCategories); // Frage Index ab, weil keiner vorliegt
 
             Utilities.EditEntry(bikeCategories, new string[] { }, index);
-            new Menu().BikeCategoryListMenu();
+            new BikeCategoryMenu().List();
         }
 
     }

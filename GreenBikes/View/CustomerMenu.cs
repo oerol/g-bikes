@@ -6,21 +6,25 @@ using System.Text;
 
 namespace GreenBikes.View
 {
-    internal class BikeMenu
+    internal class CustomerMenu
     {
         public void Start()
         {
-            string title = MenuTitles.bike + "\nHier dreht sich alles um Fahrräder.\nWähle eine Aktion.";
-            string[] options = { "Eine neues Fahrrad erstellen", "Liste aller Fahrräder", "Zurück" };
+            string title = MenuTitles.customer + "\nWillkommen zur Kundenübersicht.\nWähle eine Aktion.";
+            string[] options = { "Einen neuen Kunden erstellen", "Liste aller Kunden", "Zurück" };
             Utilities.DisplayOptions(title, options);
 
-            BikeController controller = new BikeController();
+            CustomerController controller = new CustomerController();
             controller.Load();
 
             switch (Menu.GetPressedKey(options.Length))
             {
                 case 1:
-                    controller.Create();
+                    do
+                    {
+                        controller.Create();
+                    } while (Menu.GetChoice("Kunde wurde erfolgreich erstellt! Einen weiteren erstellen?"));
+                    Start();
                     break;
                 case 2:
                     List();
@@ -29,18 +33,18 @@ namespace GreenBikes.View
                     new Menu().StartMenu();
                     break;
             }
-        }
 
+        }
         public void List()
         {
-            string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Fahrräder.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
-            string[] options = { "Fahrrad bearbeiten", "Fahrrad löschen", "Zurück" };
+            string title = MenuTitles.list + "\n\nUnten findest du eine Liste aller Kunden.\nMöchtest du Änderungen vornehmen?" + "\n(Tipp: Ändere die leicht die Größe dieses Fensters, für eine bessere Darstellung)";
+            string[] options = { "Kunden bearbeiten", "Kunden löschen", "Zurück" };
             Utilities.DisplayOptions(title, options);
 
-            BikeController controller = new BikeController();
+            CustomerController controller = new CustomerController();
             controller.Load();
 
-            Utilities.ListItems(controller.bikes);
+            Utilities.ListItems(controller.customers);
 
             switch (Menu.GetPressedKey(options.Length))
             {
@@ -48,7 +52,7 @@ namespace GreenBikes.View
                     controller.Edit();
                     break;
                 case 2:
-                    Utilities.RemoveEntry(controller.bikes);
+                    Utilities.RemoveEntry(controller.customers);
                     List();
                     break;
                 case 3:
@@ -56,5 +60,6 @@ namespace GreenBikes.View
                     break;
             }
         }
+
     }
 }

@@ -1,15 +1,16 @@
 ﻿using GreenBikes.Assets;
 using GreenBikes.Model;
+using GreenBikes.View;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using static System.Console;
 namespace GreenBikes.Controller
 {
-    internal class BookingController
+    internal class BookingController : IController
     {
         public List<Booking> bookings = new List<Booking>();
-        public void CreateBooking()
+        public void Create()
         {
             Clear();
             WriteLine(MenuTitles.create + "\n\nHier kannst du eine neue Buchung erstellen.\nGib bitte nachfolgend deine gewünschten Werte ein.\n");
@@ -21,7 +22,9 @@ namespace GreenBikes.Controller
             GetEndDate(newBooking);
 
             SetCustomer(newBooking);
+
             SetBike(newBooking);
+
             SetTotalCosts(newBooking);
 
             bookings.Add(newBooking);
@@ -32,13 +35,6 @@ namespace GreenBikes.Controller
             bookings = Utilities.LoadList(new Booking()); // Leeres Objekt für den XMLSerializer
         }
 
-        public void Delete()
-        {
-
-            int index = Utilities.ReadNumberWithMaxValue(ReadLine(), bookings.Count);
-            bookings.RemoveAt(index); // Exceptions werden durch ReadNumberWithMaxValue bereits abgefangen
-            Utilities.Save(bookings);
-        }
         public void Edit(int index = -1)
         {
             PropertyInfo property;
@@ -76,7 +72,7 @@ namespace GreenBikes.Controller
             {
                 Edit(index);
             }
-            new Menu().BookingListMenu();
+            new BookingMenu().List();
         }
         private void GetEndDate(Booking booking)
         {
@@ -112,14 +108,27 @@ namespace GreenBikes.Controller
             booking.Customer = customers[customerIndex];
         }
 
-        private void SetBike(Booking bike)
+        private void SetBike(Booking booking)
         {
             List<Bike> bikes = Utilities.LoadList(new Bike()); // Leeres Objekt für den XMLSerializer ä: in die methode
             Utilities.ListItems(bikes);
 
             Write("\nWelches Fahrrad soll gebucht werden?: ");
-            int bikesIndex = Utilities.ReadNumberWithMaxValue(ReadLine(), bikes.Count);
-            bike.Bike = bikes[bikesIndex];
+
+
+            Bike chosenBike = bikes[Utilities.ReadNumberWithMaxValue(ReadLine(), bikes.Count)];
+            int licensedMaximumSpeed = 25;
+
+            if (chosenBike.Category.MaximumSpeed > licensedMaximumSpeed)
+            {
+                if (!booking.Customer.DrivingLicense)
+                {
+                    Write($"Ein Kunde darf keinem Fahrrad dieser Kategorie zugeordnet werden! Wähle ein Fahrrad aus einer Fahrradkategorie, welches nicht schneller als {licensedMaximumSpeed} km/h ist.\n ");
+                    SetBike(booking);
+                }
+            }
+
+            booking.Bike = chosenBike;
         }
     }
 }
